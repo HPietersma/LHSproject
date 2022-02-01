@@ -1,0 +1,301 @@
+*{
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+#beerTable {
+    background-color: lightgray;
+    border: 2px solid black;
+    border-collapse: collapse;
+    margin: auto;
+}
+
+#selectTable {  
+    border-collapse: collapse; 
+    text-align: center;
+    margin: auto;
+    margin-bottom: 20px;
+    background-color: rgba(212, 218, 252, 0);
+}
+
+#selectTable td {
+    padding: 5px;
+    padding-top: 0px;
+}
+
+#selectTable input[type=checkbox] {
+    width: 50px;
+}
+
+
+#beerTable td {
+    height: 25px;
+    border: 2px solid black;
+}
+
+#beerTable th {
+    height: 30px;
+    background-color: grey;
+    font-size: larger;
+    color: white;
+    font-weight: 900;
+    border: 2px solid black;
+}
+
+.iconKleur {
+    color: rgb(115, 115, 115);
+    width: 45px;
+    text-align: center;
+    position: relative;
+}
+
+.fa-folder-plus:hover {
+    font-size: 22px;
+}
+
+.fa-trash {
+    left: 4px;
+    position: absolute;
+    top: 5px;
+}
+
+.fa-edit {
+    right: 4px;
+    position: absolute;
+    top: 5px;
+}
+
+
+
+
+
+
+
+
+#add {
+    position: fixed;
+    top: 200px;
+    background-color: rgb(46, 46, 46);
+    width: 500px;
+    height: 350px;
+    left: calc(50% - 250px);
+    border-collapse: collapse;
+    padding: 0;
+    border-top: 20px solid rgb(46, 46, 46);
+    border-bottom: 20px solid rgb(46, 46, 46);
+    color: white;
+    visibility: hidden;
+}
+
+
+#add td {
+    border: 2px solid transparent;
+}
+
+#add input[type=text] {
+    height: 25px;
+    width: 300px;
+    background-color: rgb(92, 92, 92);
+    border: none;
+    color: white;
+    font-weight: bolder;
+}
+
+#add input[type="submit"] {
+    height: 30px;
+    width: 388px;
+    margin-left: 56px;
+    border: none;
+    color: white;
+    background-color: rgb(92, 92, 92);
+    font-size: medium;
+    font-weight: bolder;
+    margin-top: 10px;
+    padding: 0;
+}
+
+#add input[type="submit"]:hover {
+    background-color: rgb(131, 131, 131);
+}
+
+.addText {
+    padding-left: 55px;
+}
+
+
+
+
+
+
+
+
+
+
+
+#edit {
+    position: fixed;
+    top: 200px;
+    background-color: rgb(46, 46, 46);
+    width: 500px;
+    height: 300px;
+    left: calc(50% - 250px);
+    border-collapse: collapse;
+    padding: 0;
+    border-top: 20px solid rgb(46, 46, 46);
+    border-bottom: 20px solid rgb(46, 46, 46);
+    color: white;
+    visibility: hidden;
+}
+
+.cross {
+    position: absolute;
+    width: 31px;
+    height: 31px;
+    background-color: rgba(255, 0, 0, 0.842);
+    right: 0px;
+    top: 0px;
+    font-size: 25px;
+}
+
+.fa-times {
+    padding-left: 7px;
+}
+
+.cross:hover {
+    background-color: rgba(255, 79, 79, 0.842);
+}
+
+#edit td {
+    border: 2px solid transparent;
+}
+
+#edit input[type=text] {
+    height: 25px;
+    width: 300px;
+    background-color: rgb(92, 92, 92);
+    border: none;
+    color: white;
+    font-weight: bolder;
+}
+
+#edit input[type="submit"] {
+    height: 30px;
+    width: 388px;
+    margin-left: 56px;
+    border: none;
+    color: white;
+    background-color: rgb(92, 92, 92);
+    font-size: medium;
+    font-weight: bolder;
+    margin-top: 10px;
+    padding: 0;
+}
+
+#edit input[type="submit"]:hover {
+    background-color: rgb(131, 131, 131);
+}
+
+.editText {
+    padding-left: 55px;
+}
+
+
+
+
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .2s;
+  transition: .2s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .2s;
+  transition: .2s;
+}
+
+input:checked + .slider {
+  background-color: #979797;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+
+
+
+
+#delete {
+    background-color: rgb(46, 46, 46);
+    border-collapse: collapse;
+    width: 400px;
+    height: 100px;
+    position: fixed;
+    top: 200px;
+    left: calc(50% - 200px);
+    text-align: center;
+    color: white;
+    border-top: 20px solid rgb(46, 46, 46);
+    border-bottom: 20px solid rgb(46, 46, 46);
+    visibility: hidden;
+}
+
+#delete td {
+    border: 2px solid transparent;
+}
+
+#delete input[type="submit"] {
+    width: 150px;
+    height: 50px;
+    margin: 5px;
+    border: none;
+    background-color: rgb(92, 92, 92);
+    color: white;
+    font-size: larger;
+    font-weight: bolder;
+}
+
+#delete input[type="submit"]:hover {
+    background-color: rgb(131, 131, 131);
+}
+
+
+
+
+
+
+
+

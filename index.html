@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.js"></script>
+    <script src="vue.js"></script>
+    <script src="script.js"></script>
+   
+
+  
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <script src="https://kit.fontawesome.com/779b41c1bd.js" crossorigin="anonymous"></script> 
+</head>
+<body>
+    <div id="app" class="app">
+        <div class="content">
+            <table id="selectTable">
+                <tr>
+                    <td v-for="field in fieldset"> {{ field.title }}</td>
+                </tr>
+                <tr>
+                    <td  v-for="field in fieldset">
+                        <label class="switch">
+                            <input type="checkbox" v-model="field.bShow">
+                            <span class="slider"></span>
+                        </label>
+                    </td>
+                </tr>
+            </table>
+
+
+            <!-- selBier = {{ selBier }} -->
+            <beer-form id="edit" v-bind:biertje="selBier"></beer-form>
+            <beer-delete id="delete" v-bind:biertje="selBier"></beer-delete>
+            <beer-add id="add" v-bind:biertje="selBier"></beer-add>
+
+            <table id="beerTable">
+                <tr>
+                    <th id="addHover">
+                        <i class="fas fa-folder-plus" onclick="add()" v-on:click="addBier()" style="cursor: pointer;"></i>
+                    </th>
+                    <th v-for="field in fieldset"
+                        v-if="field.bShow">
+                        {{ field.title }}
+                    </th>
+                </tr>
+                <tr v-for="bier in biertjes" class="tables">
+                    <td class="iconKleur">
+                        <i class="fas fa-trash" onclick="del()" style="cursor: pointer;" onmouseover="iconHover(this)" onmouseleave="iconLeave(this)" v-on:click="delBier(bier)"></i>
+                        <i class="fas fa-edit" onclick="edit()" style="cursor: pointer;" onmouseover="iconHover(this)" onmouseleave="iconLeave(this)" v-on:click="updBier(bier)"></i>
+                    </td>
+                    <td v-for="field in fieldset" v-if="field.bShow">
+                        {{ bier[field.field] }}
+                    </td>
+         
+                </tr>   
+            </table>
+        </div>
+    </div>
+
+
+
+
+
+
+
+</body>
+
+
+<script src="vueScript.js"></script>
+
+</html>

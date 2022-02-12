@@ -58,3 +58,12 @@ function iconLeave(id) {
     id.style.fontSize = "16px";
 }
 
+function thumbHover(id) {
+    id.classList.add("fas");
+}
+
+function thumbLeave(id) {
+    id.classList.remove("fas");
+}
+
+

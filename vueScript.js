@@ -2,24 +2,26 @@ var app9 = new Vue({
     el: '#app',
     data () {
         return {
+            adress: 'http://localhost/htdocs/bier/api',
             biertjes: null, 
             fieldset: {
                 id: {field:"id", bShow:true, title: "id"},
-                naam: {field:"name", bShow:true, title: "naam"},
-                brouwer: {field:"brewer", bShow:true, title: "brouwer"},
+                naam: {field:"naam", bShow:true, title: "naam"},
+                brouwer: {field:"brouwer", bShow:true, title: "brouwer"},
                 type: {field:"type", bShow:true, title: "type"},
-                gisting: {field:"yeast", bShow:true, title: "gisting"},
+                gisting: {field:"gisting", bShow:true, title: "gisting"},
                 perc: {field:"perc", bShow:true, title: "perc"},
-                inkoopPrijs: {field:"purchase_price", bShow:true, title: "inkoop prijs"}
+                inkoopPrijs: {field:"inkoop_prijs", bShow:true, title: "inkoop prijs"},
+                likes: {field: "likes", bShow:true, title: "likes"}
             },
-            selBier: {}
+            selBier: {},
         }
         
     },
     created () { 
         axios
             //.get('https://15euros.nl/api/api_bier.php')
-            .get('http://localhost:81/csp2/opdracht7/api.php?action=getBeer')
+            .get(this.adress+'/api.php?action=getBeer')
             .then( response => {
                 this.biertjes = response.data.data;
                 // console.log(this.biertjes);
@@ -38,8 +40,37 @@ var app9 = new Vue({
             this.selBier = bier;
         },
         addBier: function() {
-            this.selBier = { "id": "", "name": "", "brewer": "", "type": "", "yeast": "", "perc": "", "purchase_price": "" }
-        }
+            this.selBier = { "id": "", "naam": "", "brouwer": "", "type": "", "gisting": "", "perc": "", "inkoop_prijs": "" }
+        },
+        // updLike: function(bier) {
+        //     console.log(bier);
+        //     bier.likes = parseInt(bier.likes) + 1;
+        //     $.ajax({
+        //         method: "POST",
+        //         url: "api/api.php?action=increaseLike",
+        //         data: bier
+        //     })
+        //     .then(function (response) {
+        //         console.log(response);
+        //     })
+        //     .catch(function (error) {
+        //         console.log(error);
+        //     });
+        // },
+        updLike: function(bier) {
+            console.log(bier);
+            $.ajax({
+                method: "POST",
+                url: "api/api.php?action=increaseLike",
+                data: bier
+            })
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        },
     }
 });
 
@@ -50,11 +81,11 @@ Vue.component('beer-form', {
             <div class="cross" onclick="edit()"><i class="fas fa-times"></i></div>
             <tr>
                 <td class="editText">Naam</td>
-                <td><input type="text" v-model="biertje.name"></td>
+                <td><input type="text" v-model="biertje.naam"></td>
             </tr>
             <tr>
                 <td class="editText">Brouwer</td>
-                <td><input type="text" v-model="biertje.brewer"></td>
+                <td><input type="text" v-model="biertje.brouwer"></td>
             </tr>
             <tr>
                 <td class="editText">Type</td>
@@ -62,7 +93,7 @@ Vue.component('beer-form', {
             </tr>
             <tr>
                 <td class="editText">Gisting</td>
-                <td><input type="text" v-model="biertje.yeast"></td>
+                <td><input type="text" v-model="biertje.gisting"></td>
             </tr>            
             <tr>
                 <td class="editText">Alc. perc</td>
@@ -70,7 +101,7 @@ Vue.component('beer-form', {
             </tr>            
             <tr>
                 <td class="editText">Prijs</td>
-                <td><input type="text" v-model="biertje.purchase_price"></td>
+                <td><input type="text" v-model="biertje.inkoop_prijs"></td>
             </tr>   
 
             <tr>
@@ -85,7 +116,7 @@ Vue.component('beer-form', {
             // console.log(this.biertje);
             $.ajax({
                 method: "POST",
-                url: "api.php?action=updateBeer",
+                url: "api/api.php?action=updateBeer",
                 data: this.biertje
             })
             .then(function (response) {
@@ -116,7 +147,7 @@ Vue.component('beer-delete', {
             // console.log(this.biertje);
             $.ajax({
                 method: "POST",
-                url: "api.php?action=deleteBeer",
+                url: "api/api.php?action=deleteBeer",
                 data: this.biertje
             })
             .then(function (response) {
@@ -134,16 +165,12 @@ Vue.component('beer-add', {
         <table>
             <div class="cross" onclick="add()"><i class="fas fa-times"></i></div>
             <tr>
-                <td class="addText">ID</td>
-                <td><input type="text"v-model="biertje.id"></td>
-            </tr>
-            <tr>
                 <td class="addText">Naam</td>
-                <td><input type="text" v-model="biertje.name"></td>
+                <td><input type="text" v-model="biertje.naam"></td>
             </tr>
             <tr>
                 <td class="addText">Brouwer</td>
-                <td><input type="text" v-model="biertje.brewer"></td>
+                <td><input type="text" v-model="biertje.brouwer"></td>
             </tr>
             <tr>
                 <td class="addText">Type</td>
@@ -151,7 +178,7 @@ Vue.component('beer-add', {
             </tr>
             <tr>
                 <td class="addText">Gisting</td>
-                <td><input type="text" v-model="biertje.yeast"></td>
+                <td><input type="text" v-model="biertje.gisting"></td>
             </tr>            
             <tr>
                 <td class="addText">Alc. perc</td>
@@ -159,32 +186,33 @@ Vue.component('beer-add', {
             </tr>            
             <tr>
                 <td class="addText">Prijs</td>
-                <td><input type="text" v-model="biertje.purchase_price"></td>
+                <td><input type="text" v-model="biertje.inkoop_prijs"></td>
             </tr>   
 
             <tr>
                 <td colspan="2"><input type="submit" value="Opslaan" v-on:click="addBeer" onclick="add()"></td>
-            </tr>
+            </tr> 
         </table>
     ` ,
     props: ["biertje"],
     methods: {
         addBeer: function() {
-            // console.log(this.biertje);
+            console.log(this.biertje);
             $.ajax({
                 method: "POST",
-                url: "api.php?action=addBeer",
+                url: "api/api.php?action=addBeer",
                 data: this.biertje
             })
             .then(function (response) {
-                // console.log(response);
+                console.log(response);
             })
             .catch(function (error) {
-                // console.log(error);
+                console.log(error);
             });
         }
     }
 });
+
 
 
 

@@ -44,6 +44,7 @@
                         v-if="field.bShow">
                         {{ field.title }}
                     </th>
+                    <th></th>
                 </tr>
                 <tr v-for="bier in biertjes" class="tables">
                     <td class="iconKleur">
@@ -52,6 +53,9 @@
                     </td>
                     <td v-for="field in fieldset" v-if="field.bShow">
                         {{ bier[field.field] }}
+                    </td>
+                    <td>
+                        <i class="far fa-thumbs-up" onmouseover="thumbHover(this)" onmouseleave="thumbLeave(this)" v-on:click="updLike(bier)"></i>
                     </td>
          
                 </tr>   

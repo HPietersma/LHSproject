@@ -2,7 +2,7 @@ var app9 = new Vue({
     el: '#app',
     data () {
         return {
-            adress: 'http://localhost/htdocs/bier/api',
+            adress: 'http://localhost:81/bier_project/api',
             biertjes: null, 
             fieldset: {
                 id: {field:"id", bShow:true, title: "id"},
@@ -24,7 +24,7 @@ var app9 = new Vue({
             .get(this.adress+'/api.php?action=getBeer')
             .then( response => {
                 this.biertjes = response.data.data;
-                // console.log(this.biertjes);
+                 console.log(this.biertjes);
             })
             .catch(error => {
                 // console.log(error);

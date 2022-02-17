@@ -15,6 +15,30 @@
     <script src="https://kit.fontawesome.com/779b41c1bd.js" crossorigin="anonymous"></script> 
 </head>
 <body>
+
+    <div id="background">
+        <div class="bubble bubble1"></div>
+        <div class="bubble bubble2"></div>
+        <div class="bubble bubble3"></div>
+        <div class="bubble bubble4"></div>
+        <div class="bubble bubble5"></div>
+        <div class="bubble bubble6"></div>
+        <div class="bubble bubble7"></div>
+        <div class="bubble bubble8"></div>
+        <div class="bubble bubble9"></div>
+        <div class="bubble bubble10"></div>
+        <div class="bubble bubble11"></div>
+        <div class="bubble bubble12"></div>
+        <div class="bubble bubble13"></div>
+        <div class="bubble bubble14"></div>
+        <div class="bubble bubble15"></div>
+        <div class="bubble bubble16"></div>
+        <div class="bubble bubble17"></div>
+        <div class="bubble bubble18"></div>
+        <div class="bubble bubble19"></div>
+        <div class="bubble bubble20"></div>
+    </div>
+
     <div id="app" class="app">
         <div class="content">
             <!-- <table id="selectTable">
@@ -64,74 +88,64 @@
                 </tr>   
             </table> -->
 
-            <ul class="beerList">
-                <li v-for="bier in biertjes">
-                    <div class="beerField">
-                        <div class="nameField">
-                            <h1>{{bier.naam}}</h1>
-                        </div>
-                        <div class="restField">
-                            <div class="brewerRatingField">
-                                <div class="brewerField">
-                                    <h4>{{bier.brouwer}}</h4>
-                                </div>
-                                <div class="ratingField">
-                                    <div class="stars">
-                                        <div class="star" id="star1">
-                                            <i class="fas fa-star"></i>
-                                        </div>
-                                        <div class="star" id="star2">
-                                            <i class="fas fa-star"></i>
-                                        </div>
-                                        <div class="star" id="star3">
-                                            <i class="fas fa-star"></i>
-                                        </div>
-                                        <div class="star" id="star4">
-                                            <i class="fas fa-star"></i>
-                                        </div>
-                                        <div class="star" id="star5">
-                                            <i class="fas fa-star"></i>
+            <div class="beerContainer">
+                <ul class="beerList">
+                    <li v-for="bier in biertjes">
+                        <div class="beerField">
+                            <div class="nameField">
+                                <h1>{{bier.naam}}</h1>
+                            </div>
+                            <div class="restField">
+                                <div class="brewerRatingField">
+                                    <div class="brewerField">
+                                        <h4>{{bier.brouwer}}</h4>
+                                    </div>
+                                    <div class="ratingField">
+                                        <div class="stars">
+                                            <div class="star" id="star1">
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                            <div class="star" id="star2">
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                            <div class="star" id="star3">
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                            <div class="star" id="star4">
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                            <div class="star" id="star5">
+                                                <i class="fas fa-star"></i>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="infoField">
-                                <div class="infoRow1">
-                                    <h6>type: {{bier.type}}</h6>
-                                    <h6>gisting: {{bier.gisting}}</h6>
-                                    <h6>perc: {{bier.perc}}</h6>
-                                    <h6>inkoop prijs: {{bier.inkoop_prijs}}</h6>
+                                <div class="infoField">
+                                    <div class="infoRow1">
+                                        <h6>type: {{bier.type}}</h6>
+                                        <h6>gisting: {{bier.gisting}}</h6>
+                                        <h6>perc: {{bier.perc}}</h6>
+                                        <h6>inkoop prijs: {{bier.inkoop_prijs}}</h6>
+                                    </div>
+                                    <div class="infoRow2">
+
+                                    </div>
                                 </div>
-                                <div class="infoRow2">
-
+                            </div>
+                    
+                            <div class="reviewBar" >
+                                <div class="reviewButton" onclick="openReviews(this)">
+                                    <i class="fas fa-caret-down"></i><h5>Reviews</h5>
+                                </div>
+                                <div class="reviews">
+                                    sldakfjasdlk;jflk;asdjfl;kasdjfl;kasdjflksajds;alkfj<br> sdfasdfsadf
                                 </div>
                             </div>
+                    
                         </div>
-                   
-                        <div class="reviewBar" onclick="openReviews(this)">
-                            <div class="reviewButton">
-                                <i class="fas fa-caret-down"></i><h5>Reviews</h5>
-                            </div>
-                            <div class="reviews">
-sldakfjasdlk;jflk;asdjfl;kasdjfl;kasdjflksajds;alkfj<br> sdfasdfsadf
-                            </div>
-                        </div>
-                   
-                    </div>
-                </li>
-
-
-
-
-
-
-
-
-
-
-
-            </ul>
-
+                    </li>
+                </ul>
+            </div>
 
 
 
@@ -148,6 +162,8 @@ sldakfjasdlk;jflk;asdjfl;kasdjfl;kasdjflksajds;alkfj<br> sdfasdfsadf
 </body>
 
 
-<script src="vueScript.js"></script>
+
 
 </html>
+
+<script src="vueScript.js"></script>

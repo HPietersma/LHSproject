@@ -23,23 +23,104 @@ mysqli_query($con, "SET NAMES 'utf8'"); // om de data in de juiste charachter-se
 
 
 
-
-
-
-
-
-
-
-
 $json = array(
     "sMessage"=>"nog niets geset",
     "bSuccess"=>false,
     "data"=>null
 );
 
+
+
+if( $_GET["action"] == "login" ) {
+
+    //session_start();
+
+    $request_body = file_get_contents('php://input');
+    $data = json_decode($request_body, true);
+
+
+    //$username = $_POST["gebruikersnaam"];
+    //$password = $_POST["wachtwoord"];
+    $username = $data['gebruikersnaam'];
+    $password = $data['wachtwoord'];
+
+    $sql = "SELECT *
+            FROM `users` 
+            WHERE   gebruikersnaam = '$username' AND
+                    wachtwoord = '$password'
+            ";
+
+    $res = mysqli_query($con, $sql);   
+    if($res) {
+
+        $_SESSION['logged_in'] = true;
+
+        while($rij = mysqli_fetch_assoc($res)) {
+            $_SESSION['username'] = $rij['gebruikersnaam'];
+            $_SESSION['user_id'] = $rij['id'];
+        }
+
+        $json = array(
+            "data"=>"login succes"
+        );
+    } else {
+        $json = array(
+            "data"=>"inlog gegevens kloppen niet"
+        );
+    }
+    
+}
+
+
+
+
+if( $_GET["action"] == "loginData" ) {
+   
+    $json = array(
+        "logged_in"=>false,
+        "user_id"=>null,
+        "username"=>null
+    );
+
+    if(isset($_SESSION['logged_in'])) {
+        $json = array(
+            "logged_in"=>true,
+            "user_id"=>$_SESSION["user_id"],
+            "username"=>$_SESSION["username"]
+        );
+    }
+
+}
+
+if( $_GET["action"] == "logout" ) {
+   
+    session_destroy();
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // via de URL: https:// [pad naar API] api.php?action=getBeer kun je biertjes ophalen
 // verwacht GET variabele action. Deze kan je ook naar POST veranderen
-if( $_GET["action"] == "getBeer" ) {
+if( $_GET["action"] == "getBeerXXX" ) {
     // bieren: id, naam, brouwer, type, gisting, perc
     $sql = "SELECT bier.id, bier.naam, bier.brouwer, bier.type, bier.gisting, bier.perc, bier.inkoop_prijs, COUNT(likes.beer_id) AS likes 
     FROM `bier` 
@@ -177,63 +258,181 @@ if( $_GET["action"] == "getBeer" ) {
 
     // }
 
-    if( $_GET["action"] == "increaseLike" ) {
+if( $_GET["action"] == "increaseLike" ) {
 
-        $ip;
-        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-            $ip = $_SERVER['HTTP_CLIENT_IP'];
-        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        } else {
-            $ip = $_SERVER['REMOTE_ADDR'];
-        }
-
-        $sql = "INSERT INTO likes SET
-						beer_id = '" . $_POST["id"] . "',
-                        ip_adress = '" . $ip . "';";
-        $res = mysqli_query($con, $sql);
-        if ($res) {
-            $json = array(
-                "sMessage" => "Bier is toegevoegd",
-                "bSuccess" => true,
-                "data" => null  /* of "data" => $lst2 */
-            );
-        } 
+    $ip;
+    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+        $ip = $_SERVER['HTTP_CLIENT_IP'];
+    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    } else {
+        $ip = $_SERVER['REMOTE_ADDR'];
     }
 
-    if( $_GET["action"] == "getBeerLikes" ) {
-        // bieren: id, naam, brouwer, type, gisting, perc
-        $sql = "SELECT *
-                FROM bier
-                ORDER BY id; ";
-        $res = mysqli_query($con, $sql);    // uitvoeren van query op $con die in db.php geset is
-        if($res) {
-            $lst = array();
-            while($rij = mysqli_fetch_assoc($res)) {
-                $lst[] =  $rij; // zorgt dat foute characterset omgezet wordt naar UTF8
-                $sql2 = "SELECT beer_id, ip_adress
-                        FROM likes 
-                        WHERE beer_id = '". $rij['id']. "'";
-                $res2 = mysqli_query($con, $sql2);
-                if($res2) {
-                    $lst2 = array();
-                    $lst2[] = $res2;
-                }
-            };
-            $json = array(
-                "sMessage"=>"Biertjes zijn opgehaald",
-                "bSuccess"=>true,
-                "data"=>$lst,
-                "data2"=>$lst2,
-            );
-        } else {
-            $json = array(
-                "sMessage"=>"Biertjes zijn NIET opgehaald. SQL: ".$sql,
-                "bSuccess"=>false,
-                "data"=>null
-            );
-        }
+    $sql = "INSERT INTO likes SET
+                    beer_id = '" . $_POST["id"] . "',
+                    ip_adress = '" . $ip . "';";
+    $res = mysqli_query($con, $sql);
+    if ($res) {
+        $json = array(
+            "sMessage" => "Bier is toegevoegd",
+            "bSuccess" => true,
+            "data" => null  /* of "data" => $lst2 */
+        );
+    } 
+}
+
+if( $_GET["action"] == "deleteLike" ) {
+    $sql = "DELETE FROM likes
+            WHERE id = ".$_POST["like_id"]."; ";
+    $res = mysqli_query($con, $sql);
+    if($res) {
+        $json = array(
+            "sMessage"=>"Biertje met id = ".$_POST["id"]." is gewist",
+            "bSuccess"=>true,
+            "data"=>null
+        );
+    } 
+}
+
+
+if( $_GET["action"] == "getBeerLikes" ) {
+    // bieren: id, naam, brouwer, type, gisting, perc
+    $sql = "SELECT *
+            FROM bier
+            ORDER BY id; ";
+    $res = mysqli_query($con, $sql);    // uitvoeren van query op $con die in db.php geset is
+    if($res) {
+        $lst = array();
+        while($rij = mysqli_fetch_assoc($res)) {
+            $lst[] =  $rij; // zorgt dat foute characterset omgezet wordt naar UTF8
+            $sql2 = "SELECT beer_id, ip_adress
+                    FROM likes 
+                    WHERE beer_id = '". $rij['id']. "'";
+            $res2 = mysqli_query($con, $sql2);
+            if($res2) {
+                $lst2 = array();
+                $lst2[] = $res2;
+            }
+        };
+        $json = array(
+            "sMessage"=>"Biertjes zijn opgehaald",
+            "bSuccess"=>true,
+            "data"=>$lst,
+            "data2"=>$lst2,
+        );
+    } else {
+        $json = array(
+            "sMessage"=>"Biertjes zijn NIET opgehaald. SQL: ".$sql,
+            "bSuccess"=>false,
+            "data"=>null
+        );
     }
+}
+
+
+if( $_GET["action"] == "getLikedBeers" ) {
+    
+    $ip;
+    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+        $ip = $_SERVER['HTTP_CLIENT_IP'];
+    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    } else {
+        $ip = $_SERVER['REMOTE_ADDR'];
+    }
+
+    $sql = "SELECT * 
+    FROM `likes` 
+    WHERE ip_adress =  '$ip' ";
+    
+    $res = mysqli_query($con, $sql);    // uitvoeren van query op $con die in db.php geset is
+    if($res) {
+        $lst = array();
+        while($rij = mysqli_fetch_assoc($res)) {
+            $lst[] =  $rij; // zorgt dat foute characterset omgezet wordt naar UTF8
+        }
+        $json = array(
+            "sMessage"=>"Biertjes zijn opgehaald",
+            "bSuccess"=>true,
+            "data"=>$lst
+        );
+    } else {
+        $json = array(
+            "sMessage"=>"Biertjes zijn NIET opgehaald. SQL: ".$sql,
+            "bSuccess"=>false,
+            "data"=>null
+        );
+    }
+}
+
+
+
+if( $_GET["action"] == "sendReview" ) {
+
+    $last_id;
+
+    $sql = "INSERT INTO reviews SET
+                    beer_id 	= '" . $_POST["id"] . "',
+                    user_id = '" . $_SESSION["user_id"] . "',
+                    rating	= '" . $_POST["newRating"] . "',
+                    review = '" . $_POST["newReview"] . "';";
+    $res = mysqli_query($con, $sql);
+    if ($res) {
+        $last_id = mysqli_insert_id($con);
+        $json = array(
+            "sMessage" => "review is toegevoegd",
+            "bSuccess" => true,
+            "id" => $last_id,
+            "beer_id" => $_POST["id"],
+            "user_id" => $_SESSION["user_id"],
+            "rating" => $_POST["newRating"],
+            "review" => $_POST["newReview"]
+        );
+    } 
+    else {
+        $json = array(
+            // als de query fout gaat geeft hij de sql terug, handig voor ontwikkelaar, niet voor productie..!
+            "sMessage" => "Biertjes van Brouwer: ".$_POST["id"]." zijn NIET ge-update. SQL: " . $sql,
+            "bSuccess" => false,
+            "data" => null
+        );
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -242,68 +441,205 @@ if( $_GET["action"] == "getBeer" ) {
 
 
     
-    if( $_GET["action"] == "getBeers3" ) {
+    // if( $_GET["action"] == "getBeers3" ) {
  
-        $sql = "SELECT bier.id, bier.naam, bier.brouwer, bier.type, bier.gisting, bier.perc, bier.inkoop_prijs,
-                GROUP_CONCAT(reviews.rating) rating,
-                GROUP_CONCAT(reviews.review) review,
-                GROUP_CONCAT(reviews.id) review_id,
-                GROUP_CONCAT(reviews.bier_id) bier_id
-                FROM bier
-                LEFT JOIN reviews ON bier.id = reviews.bier_id
-                GROUP BY bier.id";
-        $res = mysqli_query($con, $sql);  
-        if($res) {
-            $lst = array();
-            while($row = mysqli_fetch_assoc($res)) {
+    //     $sql = "SELECT bier.id, bier.naam, bier.brouwer, bier.type, bier.gisting, bier.perc, bier.inkoop_prijs,
+    //             GROUP_CONCAT(reviews.rating) rating,
+    //             GROUP_CONCAT(reviews.review) review,
+    //             GROUP_CONCAT(reviews.id) review_id,
+    //             GROUP_CONCAT(reviews.bier_id) bier_id
+    //             FROM bier
+    //             LEFT JOIN reviews ON bier.id = reviews.bier_id
+    //             GROUP BY bier.id";
+    //     $res = mysqli_query($con, $sql);  
+    //     if($res) {
+    //         $lst = array();
+    //         while($row = mysqli_fetch_assoc($res)) {
     
-                $reviewArray = array();
+    //             $reviewArray = array();
                 
-                if($row['bier_id'] > 1) {
+    //             if($row['bier_id'] > 1) {
     
-                    $bier_id = explode(',', $row['bier_id']);
-                    $review_id = explode(',', $row['review_id']);
-                    $rating = explode(',', $row['rating']);
-                    $review = explode(',', $row['review']);
+    //                 $bier_id = explode(',', $row['bier_id']);
+    //                 $review_id = explode(',', $row['review_id']);
+    //                 $rating = explode(',', $row['rating']);
+    //                 $review = explode(',', $row['review']);
     
-                    $reviewLength = count($review_id);
+    //                 $reviewLength = count($review_id);
     
-                    for($i = 0; $i < $reviewLength; $i++) {
-                        $reviewArray[] = array(     "id"=>$review_id[$i], 
-                                                    "bier_id"=>$bier_id[$i], 
-                                                    "rating"=>$rating[$i], 
-                                                    "review"=>$review[$i]
-                        );
+    //                 for($i = 0; $i < $reviewLength; $i++) {
+    //                     $reviewArray[] = array(     "id"=>$review_id[$i], 
+    //                                                 "bier_id"=>$bier_id[$i], 
+    //                                                 "rating"=>$rating[$i], 
+    //                                                 "review"=>$review[$i]
+    //                     );
+    //                 }
+    //             }
+    //             else {
+    //                 $reviewArray = null;
+    //             }
+    
+    //             $lst[] = array( "id"=>$row['id'], 
+    //                             "naam"=>$row['naam'], 
+    //                             "brouwer"=>$row['brouwer'], 
+    //                             "type"=>$row['type'], 
+    //                             "gisting"=>$row['gisting'], 
+    //                             "perc"=>$row['perc'], 
+    //                             "inkoop_prijs"=>$row['inkoop_prijs'], 
+    //                             "reviews" => $reviewArray
+    //             );
+    //         }
+    //         $json = array(
+    //             "sMessage"=>"Biertjes zijn opgehaald",
+    //             "bSuccess"=>true,
+    //             "data"=>$lst
+    //         );
+    //     } 
+    //     else {
+    //         $json = array(
+    //             "sMessage"=>"Biertjes zijn NIET opgehaald. SQL: ".$sql,
+    //             "bSuccess"=>false,
+    //             "data"=>null
+    //         );
+    //     }
+    // }
+
+
+
+if( $_GET["action"] == "getBeer" ) {
+ 
+    $ip;
+    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+        $ip = $_SERVER['HTTP_CLIENT_IP'];
+    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    } else {
+        $ip = $_SERVER['REMOTE_ADDR'];
+    }
+
+
+    $sql = "SELECT bier.id, bier.naam, bier.brouwer, bier.type, bier.gisting, bier.perc, bier.inkoop_prijs, COUNT(likes.beer_id) AS likes 
+            FROM `bier` 
+            LEFT JOIN likes ON bier.id = likes.beer_id 
+            GROUP BY bier.id; "
+    ;
+    $res = mysqli_query($con, $sql);  
+    if($res) {
+        $lst = array();
+        while($row = mysqli_fetch_assoc($res)) {
+
+            $id = $row['id'];
+
+            $sql2 = "   SELECT * 
+                        FROM `likes`
+                        WHERE ip_adress = '$ip' AND beer_id = '$id'
+            "; 
+
+            $res2 = mysqli_query($con, $sql2);
+
+
+            $liked = false;
+            $like_id = null;
+
+            if($res2) {
+                while($row2 = mysqli_fetch_assoc($res2)) {
+                    if ($row2['ip_adress']) {
+                        $liked = true;
+                        $like_id = $row2['id'];
                     }
                 }
-                else {
-                    $reviewArray = null;
-                }
-    
-                $lst[] = array( "id"=>$row['id'], 
-                                "naam"=>$row['naam'], 
-                                "brouwer"=>$row['brouwer'], 
-                                "type"=>$row['type'], 
-                                "gisting"=>$row['gisting'], 
-                                "perc"=>$row['perc'], 
-                                "inkoop_prijs"=>$row['inkoop_prijs'], 
-                                "reviews" => $reviewArray
-                );
             }
-            $json = array(
-                "sMessage"=>"Biertjes zijn opgehaald",
-                "bSuccess"=>true,
-                "data"=>$lst
-            );
-        } 
-        else {
-            $json = array(
-                "sMessage"=>"Biertjes zijn NIET opgehaald. SQL: ".$sql,
-                "bSuccess"=>false,
-                "data"=>null
+
+            $sql3 = "   SELECT * 
+                        FROM `reviews`
+                        WHERE beer_id = '$id'
+            "; 
+
+            $res3 = mysqli_query($con, $sql3);
+            
+            $reviews = null;
+
+            if($res3) {
+                $reviews = null;
+
+                while($row3 = mysqli_fetch_assoc($res3)) {
+                    if ($row3["id"]){
+                        $reviews[] = array( "id" => $row3["id"],
+                                            "beer_id" => $row3["beer_id"],        
+                                            "user_id" => $row3["user_id"],           
+                                            "rating" => $row3["rating"],  
+                                            "review" => $row3["review"], 
+                        );   
+                    }    
+                }
+            }
+
+
+            $lst[] = array( "id"=>$row['id'], 
+                            "naam"=>$row['naam'], 
+                            "brouwer"=>$row['brouwer'], 
+                            "type"=>$row['type'], 
+                            "gisting"=>$row['gisting'], 
+                            "perc"=>$row['perc'], 
+                            "inkoop_prijs"=>$row['inkoop_prijs'], 
+                            "likes"=>$row['likes'],
+                            "liked"=>$liked,
+                            "like_id"=>$like_id,
+                            "reviews"=>$reviews 
             );
         }
+        $json = array(
+            "sMessage"=>"Biertjes zijn opgehaald",
+            "bSuccess"=>true,
+            "data"=>$lst
+        );
+    } 
+    else {
+        $json = array(
+            "sMessage"=>"Biertjes zijn NIET opgehaald. SQL: ".$sql,
+            "bSuccess"=>false,
+            "data"=>null
+        );
     }
+}
 
+
+
+
+if( $_GET["action"] == "addUser" ) {
+
+    $sql = "INSERT INTO users SET
+                    gebruikersnaam = '" . $_POST["gebruikersnaam"] . "',
+                    wachtwoord = '" . $_POST["wachtwoord"] . "';";
+    $res = mysqli_query($con, $sql);
+    if ($res) {
+        $json = array(
+            "sMessage" => "Bier is toegevoegd",
+            "bSuccess" => true,
+            "data" => null  /* of "data" => $lst2 */
+        );
+    } 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//print_r($json);
 echo json_encode($json);
     

@@ -11,29 +11,31 @@ body {
 }
 
 .beerContainer {
-    background-color: rgb(210, 210, 210);
-    width: 1200px;
+    background-color: rgba(210, 210, 210, 0);
+    width: 500px;
     margin: auto;
-    padding-top: 100px;
 }
 
-ul {
+.beerList {
     margin: auto;
     list-style-type: none;
     padding: 0;
-    width: 1000px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+
 
 }
 
-.beerList li {
+.beer {
     background: rgb(230, 230, 230);
-
+    margin: auto;
     /* background: linear-gradient(225deg, rgba(20,199,176,1) 3%, rgba(117,115,214,1) 100%, rgba(17,10,29,1) 100%); */
     margin-bottom: 10px;
-    margin: none;
-    padding: none;
+
     color: rgb(100, 100, 100);
     box-shadow: 0 3px 10px rgba(15, 15, 15, 0.2);
+    width: 450px;
     
 }
 
@@ -44,27 +46,31 @@ ul {
     
 }
 
-.nameField h1 {
+.nameField {
+    border-bottom: 2px solid rgb(210, 210, 210);
+    width: 100%;
+    display: flex;
+    padding-bottom: 5px;
+}
+
+.nameField h2 {
     margin: 0;
     padding-left: 10px;
-    height: 56px;
     width: 990px;
 }
 
 .restField {
-    width: 100%;
-    height: 114px;
     width: 100%;
     display: flex;
 }
 
 .brewerRatingField {
     height: 100%;
-    width: 400px;
+    width: 150px;
 }
 
 .brewerField {
-    width: 100%;
+    width: 320px;
 }
 
 .brewerField h4 {
@@ -73,16 +79,25 @@ ul {
 }
 
 .ratingField {
-    width: 100%;
-    height: 86px;
-    position: relative;
+    width: 280px;
+    display: flex;
+    flex-direction: row;
+}
+
+.rating {
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    padding-bottom: 10px;
 }
 
 .stars {
     display: flex;
     flex-direction: row;
-    margin-left: 10px;
-    margin-top: 15px;
+    align-items: center;
+    justify-content: right;
+    width: 100%;
 }
 
 .star {
@@ -95,13 +110,24 @@ ul {
     
 }
 
+.ratingAmount {
+    font-size: 11px;
+    width: 100%;
+    text-align: right;
+}
+
+.ratingAmount p {
+    margin: 0;
+    padding-right: 5px;
+}
+
 .infoField {
-    width: 400px;
-    height: 100%;
+    width: 170px;
 }
 
 .infoField h6 {
     margin: 5px;
+    padding-left: 5px;
 }
 
 .infoRow1 {
@@ -111,9 +137,18 @@ ul {
 }
 
 .infoRow2 {
-    width: 50%;
+    width: 200px;
     height: 100%;
-    float: right;
+}
+
+.priceField {
+    width: 130px;
+}
+
+.priceField h4 {
+    margin: 0;
+    text-align: right;
+    padding-right: 5px;
 }
 
 .reviewBar {
@@ -157,10 +192,68 @@ ul {
 
 .reviews {
     
-    height: 270px;
+    /* height: 270px; */
     visibility: hidden;
-    width: 100%;
+    padding: 10px;
+    position: relative;
 }
+
+
+.reviewbox {
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: block;
+    transform:rotate(-90deg) translateY(-250px);
+    transform-origin: right top;
+    width: 250px;
+    height: 190px;
+    position: absolute;
+    top: 0px;
+    left: -30px;
+    padding: 260px 30px 0 0;
+}
+
+
+
+.review {
+    background-color: rgb(240, 240, 240);
+    height: 250px;
+    width: 250px;
+    transform-origin: right top;
+    transform:rotate(90deg);
+    padding: 5px;
+    overflow-y: auto;
+    margin-top: 5px;
+    border-radius: 10px;
+}
+
+.reviewRating {
+    width: 100%;
+    height: 30px;
+    display: flex;
+    justify-content: left;
+    margin-bottom: 10px;
+}
+
+.reviewStar i {
+    color: rgb(253, 189, 70);
+    margin-right: 3px;
+}
+
+#textarea {
+    width: calc(100% - 8px);
+    height: 170px;
+    resize: none;
+}
+
+.makeReviewStar {
+    color: rgb(185, 185, 185);
+}
+
+.makeReviewStar i {
+    margin-right: 3px;
+}
+
 
 
 #background {
@@ -171,6 +264,71 @@ ul {
     top: 0;
     z-index: -1;
 }
+
+.row2 {
+    display: flex;
+}
+
+.thumbsup {
+    font-size: 11px;
+    display: flex;
+    align-items: flex-end;
+    width: 100px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+}
+
+.thumbsup i {
+    color: rgb(230, 230, 230);
+    font-size: 18px;
+    padding-bottom: 5px;
+}
+
+.thumbsup p {
+    margin: 0;
+    margin-right: 2px;
+}
+
+.circle {
+    background-color: rgb(155, 224, 155);
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 5px
+}
+
+.thumbsup i:hover {
+    color: rgb(15, 177, 15);
+}
+
+
+.liked {
+    color: rgb(15, 177, 15) !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

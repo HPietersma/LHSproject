@@ -1,0 +1,75 @@
+#inlog {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.473);
+    z-index: 2;
+    position: fixed;
+    visibility: hidden;
+}
+
+#inlog table {
+    position: absolute;
+    background-color: white;
+    width: 400px;
+    left: calc(50% - 200px);
+    top: 200px;
+    box-shadow: 0 3px 10px rgba(15, 15, 15, 0.2);
+
+
+}
+
+#inlog table tr td {
+    width: 100%;
+    text-align: center;
+}
+
+#inlog td {
+    padding: 5px;
+}
+
+#regisLink {
+    font-size: 12px;
+    color: blue;
+}
+
+#inlog input[type="text"] {
+    width: 80%;
+    height: 25px;
+}
+
+#inlog input[type="submit"] {
+    width: 80%;
+    height: 25px;
+    border: none;
+    padding: 0;
+    background-color: orange;
+    color: white;
+    font-size: 15px;
+    font-weight:900;
+}
+
+#inlog input[type="submit"]:hover {
+    background-color: rgba(255, 166, 0, 0.603);
+}
+
+.inlogCross {
+    position: absolute;
+    width: 30px;
+    height: 20px;
+    background-color: rgba(255, 0, 0, 0.842);
+    right: 0px;
+    top: 0px;
+    font-size: 18px;
+}
+
+.inlogCross:hover {
+    background-color: rgba(255, 79, 79, 0.842);
+}
+
+.inlogCross i {
+    padding: 0;
+    position: absolute;
+    left: 9px;
+    top: 1px;
+    color: white;
+}

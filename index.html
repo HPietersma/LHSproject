@@ -12,6 +12,11 @@
 
     <link rel="stylesheet" href="style.css" type="text/css">
     <link rel="stylesheet" href="style2.css" type="text/css">
+    <link rel="stylesheet" href="nav.css" type="text/css">
+    <link rel="stylesheet" href="login.css" type="text/css">
+    <link rel="stylesheet" href="registration.css" type="text/css">
+
+
     <script src="https://kit.fontawesome.com/779b41c1bd.js" crossorigin="anonymous"></script> 
 </head>
 <body>
@@ -88,69 +93,164 @@
                 </tr>   
             </table> -->
 
+
+            
+            <registration id="registration"></registration>
+            <inlog id="inlog"></inlog>
+
+            <div class="nav">
+                <button class="btnInlog" onclick="showInlog()" v-if="!logindata.logged_in">Inloggen</button>
+                <button class="btnInlog" v-on:click="logout" v-if="logindata.logged_in">Uitloggen</button>
+            </div>
+
             <div class="beerContainer">
-                <ul class="beerList">
-                    <li v-for="bier in biertjes">
+                <div class="beerList">
+                    <div class="beer" v-for="bier in biertjes">
                         <div class="beerField">
                             <div class="nameField">
-                                <h1>{{bier.naam}}</h1>
+                                <h2>{{bier.naam}}</h2>
+                            </div>
+                            <div class="row2">
+                                <div class="brewerField">
+                                    <h4>{{bier.brouwer}}</h4>
+                                </div>
+                                <div class="priceField">
+                                    <h4> &#8364 {{bier.inkoop_prijs}}</h4>
+                                </div>
                             </div>
                             <div class="restField">
-                                <div class="brewerRatingField">
-                                    <div class="brewerField">
-                                        <h4>{{bier.brouwer}}</h4>
+                          
+                                <div class="infoField">
+                                    <h6>type: {{bier.type}}
+                                    <h6>gisting: {{bier.gisting}}</h6>
+                                    <h6>perc: {{bier.perc}}</h6>
+                                </div>
+                                <div class="ratingField">
+
+                                    <div class="thumbsup">
+                                        <div class="circle" v-on:click="updLike(bier)">
+                                            <i class="fas fa-thumbs-up" v-bind:class="{liked: bier.liked}"></i>
+                                        </div>
+                                        <p>{{bier.likes}}</p><p v-if="bier.likes != 1">likes</p><p v-if="bier.likes == 1">like</p> 
                                     </div>
-                                    <div class="ratingField">
+                                    <div class="rating">
                                         <div class="stars">
-                                            <div class="star" id="star1">
+                                            <div class="star" v-if="bier.avgRating > 0">
                                                 <i class="fas fa-star"></i>
                                             </div>
-                                            <div class="star" id="star2">
+                                            <div class="star" v-if="bier.avgRating > 1">
                                                 <i class="fas fa-star"></i>
                                             </div>
-                                            <div class="star" id="star3">
+                                            <div class="star" v-if="bier.avgRating > 2">
                                                 <i class="fas fa-star"></i>
                                             </div>
-                                            <div class="star" id="star4">
+                                            <div class="star" v-if="bier.avgRating > 3">
                                                 <i class="fas fa-star"></i>
                                             </div>
-                                            <div class="star" id="star5">
+                                            <div class="star" v-if="bier.avgRating > 4">
                                                 <i class="fas fa-star"></i>
+                                            </div>
+                                            <div class="star" v-if="bier.avgRating < 1">
+                                                <i class="fas fa-star" style="color:rgb(185, 185, 185);"></i>
+                                            </div>
+                                            <div class="star" v-if="bier.avgRating < 2">
+                                                <i class="fas fa-star" style="color:rgb(185, 185, 185);"></i>
+                                            </div>
+                                            <div class="star" v-if="bier.avgRating < 3">
+                                                <i class="fas fa-star" style="color:rgb(185, 185, 185);"></i>
+                                            </div>
+                                            <div class="star" v-if="bier.avgRating < 4">
+                                                <i class="fas fa-star" style="color:rgb(185, 185, 185);"></i>
+                                            </div>
+                                            <div class="star" v-if="bier.avgRating < 5">
+                                                <i class="fas fa-star" style="color:rgb(185, 185, 185);"></i>
                                             </div>
                                         </div>
+                                        <div class="ratingAmount">
+                                            <p v-if="bier.reviewAmount > 1">{{bier.reviewAmount}} reviews</p>
+                                            <p v-if="!bier.reviewAmount">{{bier.reviewAmount}} geen reviews</p>
+                                            <p v-if="bier.reviewAmount == 1">{{bier.reviewAmount}} review</p>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="infoField">
-                                    <div class="infoRow1">
-                                        <h6>type: {{bier.type}}</h6>
-                                        <h6>gisting: {{bier.gisting}}</h6>
-                                        <h6>perc: {{bier.perc}}</h6>
-                                        <h6>inkoop prijs: {{bier.inkoop_prijs}}</h6>
-                                    </div>
-                                    <div class="infoRow2">
-
-                                    </div>
+                       
                                 </div>
                             </div>
-                    
                             <div class="reviewBar" >
                                 <div class="reviewButton" onclick="openReviews(this)">
                                     <i class="fas fa-caret-down"></i><h5>Reviews</h5>
                                 </div>
                                 <div class="reviews">
-                                    sldakfjasdlk;jflk;asdjfl;kasdjfl;kasdjflksajds;alkfj<br> sdfasdfsadf
+                                    <div class="reviewbox boxes">
+                                        <div class="review" v-for="review in bier.reviews">
+                                            <div class="reviewRating">
+                                                <div class="reviewStar" v-if="review.rating > 0">
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                                <div class="reviewStar" v-if="review.rating > 1">
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                                <div class="reviewStar" v-if="review.rating > 2">
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                                <div class="reviewStar" v-if="review.rating > 3">
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                                <div class="reviewStar" v-if="review.rating > 4">
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                                <div class="reviewStar" v-if="review.rating < 1">
+                                                    <i class="fas fa-star" style="color:rgb(185, 185, 185);"></i>
+                                                </div>
+                                                <div class="reviewStar" v-if="review.rating < 2">
+                                                    <i class="fas fa-star" style="color:rgb(185, 185, 185);"></i>
+                                                </div>
+                                                <div class="reviewStar" v-if="review.rating < 3">
+                                                    <i class="fas fa-star" style="color:rgb(185, 185, 185);"></i>
+                                                </div>
+                                                <div class="reviewStar" v-if="review.rating < 4">
+                                                    <i class="fas fa-star" style="color:rgb(185, 185, 185);"></i>
+                                                </div>
+                                                <div class="reviewStar" v-if="review.rating < 5">
+                                                    <i class="fas fa-star" style="color:rgb(185, 185, 185);"></i>
+                                                </div>
+                                            </div>
+                                            <div class="reviewText">
+                                                {{review.review}}
+                                            </div>
+                                        </div>
+                                        <div class="review" v-if="logindata.logged_in && bier.reviewed == false">
+                                            <div class="reviewRating">
+                                                <div class="makeReviewStar">
+                                                    <i class="fas fa-star" onclick="colorStar(this, 1)" v-on:click="fRating(bier, 1)"></i>
+                                                </div>
+                                                <div class="makeReviewStar">
+                                                    <i class="fas fa-star" onclick="colorStar(this, 2)" v-on:click="fRating(bier, 2)"></i>
+                                                </div>
+                                                <div class="makeReviewStar">
+                                                    <i class="fas fa-star" onclick="colorStar(this, 3)" v-on:click="fRating(bier, 3)"></i>
+                                                </div>
+                                                <div class="makeReviewStar">
+                                                    <i class="fas fa-star" onclick="colorStar(this, 4)" v-on:click="fRating(bier, 4)"></i>
+                                                </div>
+                                                <div class="makeReviewStar">
+                                                    <i class="fas fa-star" onclick="colorStar(this, 5)" v-on:click="fRating(bier, 5)"></i>
+                                                </div>
+                                            </div>
+                                            <div class="reviewText">
+                                                <textarea name="" id="textarea" placeholder="Schrijf een review" v-model="bier.newReview"></textarea>
+                                            </div>
+                                            <div>
+                                                <button v-on:click="sendReview(bier)">verstuur</button>
+                                            </div>
+                                        </div>
+                                    
+                                    </div>
                                 </div>
                             </div>
-                    
                         </div>
-                    </li>
-                </ul>
+                    </div>
+                </div>
             </div>
-
-
-
-
-
         </div>
     </div>
 

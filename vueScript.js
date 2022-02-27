@@ -3,6 +3,7 @@ var app9 = new Vue({
     data () {
         return {
             adress: 'http://localhost:81/bier_project/api',
+            logindata : {logged_in: false, user_id: null, username: null},
             biertjes: null, 
             fieldset: {
                 id: {field:"id", bShow:true, title: "id"},
@@ -15,6 +16,8 @@ var app9 = new Vue({
                 likes: {field: "likes", bShow:true, title: "likes"}
             },
             selBier: {},
+            reviewData: {beer_id: null, rating: null, review: null },
+            test: {one: false, two: false, three: false, four: false, five: false}
         }
         
     },
@@ -24,11 +27,46 @@ var app9 = new Vue({
             .get(this.adress+'/api.php?action=getBeer')
             .then( response => {
                 this.biertjes = response.data.data;
-                 console.log(this.biertjes);
+
+                let rating;
+                this.biertjes.forEach(element => {
+                    if (element.reviews) {
+                        rating = 0;
+                        element["reviewAmount"] = element.reviews.length;
+    
+                        element.reviews.forEach(element => {
+                            rating = rating + parseInt(element.rating); 
+                        });
+                        
+                        let rating2 = rating / element.reviews.length;
+
+                        element["avgRating"] = Math.round(rating2);
+                    }
+                    else {
+                        element["reviewAmount"] = null;
+                        element["avgRating"] = null;
+                    }
+                    element["newReview"] = null;
+                    element["newRating"] = null;
+                    element["reviewed"] = false;
+                });
+                console.log(this.biertjes);
             })
             .catch(error => {
                 // console.log(error);
-            })
+            });
+
+        axios
+        .get(this.adress+'/api.php?action=loginData')
+        .then( response => {
+            this.logindata = response.data;
+            console.log(response.data);
+        })
+        .catch(error => {
+            // console.log(error);
+        });
+
+
     },
     methods: {
         updBier: function(bier) {
@@ -42,27 +80,49 @@ var app9 = new Vue({
         addBier: function() {
             this.selBier = { "id": "", "naam": "", "brouwer": "", "type": "", "gisting": "", "perc": "", "inkoop_prijs": "" }
         },
-        // updLike: function(bier) {
-        //     console.log(bier);
-        //     bier.likes = parseInt(bier.likes) + 1;
-        //     $.ajax({
-        //         method: "POST",
-        //         url: "api/api.php?action=increaseLike",
-        //         data: bier
-        //     })
-        //     .then(function (response) {
-        //         console.log(response);
-        //     })
-        //     .catch(function (error) {
-        //         console.log(error);
-        //     });
-        // },
+   
         updLike: function(bier) {
             console.log(bier);
+
+            if (bier.liked === false) {
+
+                bier.likes = parseInt(bier.likes) + 1;
+                bier.liked = true;
+
+                $.ajax({
+                    method: "POST",
+                    url: this.adress + "/api.php?action=increaseLike",
+                    data: bier
+                })
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            }
+            else {
+                bier.likes = parseInt(bier.likes) - 1;
+                bier.liked = false;
+
+                $.ajax({
+                    method: "POST",
+                    url: this.adress + "/api.php?action=deleteLike",
+                    data: bier
+                })
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+
+            }
+        },
+        logout: function() {
             $.ajax({
                 method: "POST",
-                url: "api/api.php?action=increaseLike",
-                data: bier
+                url: this.adress + "/api.php?action=logout"
             })
             .then(function (response) {
                 console.log(response);
@@ -70,6 +130,40 @@ var app9 = new Vue({
             .catch(function (error) {
                 console.log(error);
             });
+            location.reload();
+        },
+        sendReview: function(bier) {
+            console.log(bier);
+
+            $.ajax({
+                method: "POST",
+                url: this.adress + "/api.php?action=sendReview",
+                data: bier
+            })
+            .then(function (response) {
+                if (bier.reviews) {
+                    bier.reviews.push({beer_id: response.beer_id, id: response.id, rating: response.rating, review: response.review, user_id: response.user_id});
+                }
+                else {
+                    bier.reviews = []
+                    bier.reviews.push({beer_id: response.beer_id, id: response.id, rating: response.rating, review: response.review, user_id: response.user_id});
+                }
+                bier.reviewed = true;
+                bier.reviewAmount++;
+                let rating = 0;
+                bier.reviews.forEach(element => {
+                    rating = rating + parseInt(element.rating); 
+                });
+                let rating2 = rating / bier.reviewAmount;
+                bier.avgRating = Math.round(rating2);
+                console.log(bier);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        },
+        fRating: function(bier, rating) {
+            bier.newRating = rating;
         },
     }
 });
@@ -214,6 +308,115 @@ Vue.component('beer-add', {
 });
 
 
+Vue.component('registration', {
+    template: `
+        <div>
+            <table>
+                <div class="regisCross" onclick="showRegistration()"><i class="fas fa-times"></i></div>
+                <tr>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><input type="text" placeholder="gebruikersnaam" v-model="data.gebruikersnaam"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" placeholder="wachtwoord" v-model="data.wachtwoord"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" placeholder="wachtwoord (herhaling)" v-model="data.wachtwoord2"></td>
+                </tr>
+                
+                <tr>
+                    <td><input type="submit" value="Registreren" v-on:click="addUser" onclick="showRegistration()"></td>
+                </tr> 
+            </table>
+        </div>
+        ` ,
+
+    data: function() {
+        return {
+            data : {gebruikersnaam : null, wachtwoord : null, wachtwoord2 : null},
+        }
+    },
+    methods: {
+        addUser: function() {
+            console.log(this.data);
+            $.ajax({
+                method: "POST",
+                url: "http://localhost:81/bier_project/api/api.php?action=addUser",
+                data: this.data
+            })
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        }
+    }
+});
+
+Vue.component('inlog', {
+    template: `
+        <div>
+            <table>
+                <div class="inlogCross" onclick="showInlog()"><i class="fas fa-times"></i></div>
+                <tr>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><input type="text" placeholder="gebruikersnaam" v-model="data.gebruikersnaam"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" placeholder="wachtwoord" v-model="data.wachtwoord"></td>
+                </tr>
+                <tr>
+                    <td><input type="submit" value="Inloggen" v-on:click="login"></td>
+                </tr> 
+                <tr>
+                    <td id="regisLink"><a href="#" onclick="showRegistration()">nog geen account? registreer je hier</a></td>
+                </tr>
+            </table>
+        </div>
+        ` ,
+    data: function() {
+        return {
+            data : {login : true, gebruikersnaam : null, wachtwoord : null},
+            test : {logged_in : false, user_id : null, username : null},
+        }
+    },
+    methods: {
+        login: function() {
+            console.log(this.data);
+            // $.ajax({
+            //     method: "POST",
+            //     url: "http://localhost:81/bier_project/login.php",
+            //     data: this.data
+            // })
+            // .then(function (response) {
+            //     this.test = response.data;
+            //     console.log(response.data);
+            // })
+            // .catch(function (error) {
+            //     console.log(error);
+            // });
+
+            axios
+            .post("http://localhost:81/bier_project/api/api.php?action=login", this.data)
+            .then( response => {
+                this.logindata.logged_in = response.data.data.logged_in;
+                this.logindata.user_id = response.data.data.user_id;
+                this.logindata.username = response.data.data.username;
+
+                console.log(response.data.data);
+            })
+            .catch(error => {
+                // console.log(error);
+            });
+            location.reload();
+        }
+    }
+});
 
 
 

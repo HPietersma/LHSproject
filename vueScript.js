@@ -2,7 +2,7 @@ var app9 = new Vue({
     el: '#app',
     data () {
         return {
-            adress: 'http://localhost:81/bier_project/api',
+            adress: 'api',
             logindata : {logged_in: false, user_id: null, username: null},
             biertjes: null, 
             fieldset: {
@@ -164,6 +164,10 @@ var app9 = new Vue({
         },
         fRating: function(bier, rating) {
             bier.newRating = rating;
+        },
+        test1: function(bier) {
+            console.log(bier);
+            bier.naam = "test";
         },
     }
 });
@@ -343,7 +347,7 @@ Vue.component('registration', {
             console.log(this.data);
             $.ajax({
                 method: "POST",
-                url: "http://localhost:81/bier_project/api/api.php?action=addUser",
+                url: "api/api.php?action=addUser",
                 data: this.data
             })
             .then(function (response) {
@@ -402,7 +406,7 @@ Vue.component('inlog', {
             // });
 
             axios
-            .post("http://localhost:81/bier_project/api/api.php?action=login", this.data)
+            .post("api/api.php?action=login", this.data)
             .then( response => {
                 this.logindata.logged_in = response.data.data.logged_in;
                 this.logindata.user_id = response.data.data.user_id;

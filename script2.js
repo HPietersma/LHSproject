@@ -82,3 +82,14 @@ function colorStar(element, rating) {
         parent.children[4].style.color = color;
     }
 }
+
+function showEdit(element) {
+    editDiv = element.parentElement.children[1];
+
+    if (editDiv.style.visibility == "visible") {
+        editDiv.style.visibility = "hidden"
+    }
+    else {
+        editDiv.style.visibility = "visible"
+    }
+}

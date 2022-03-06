@@ -5,6 +5,7 @@ var app9 = new Vue({
             adress: 'api',
             logindata : {logged_in: false, user_id: null, username: null},
             biertjes: null, 
+            brouwers: null,
             fieldset: {
                 id: {field:"id", bShow:true, title: "id"},
                 naam: {field:"naam", bShow:true, title: "naam"},
@@ -17,7 +18,6 @@ var app9 = new Vue({
             },
             selBier: {},
             reviewData: {beer_id: null, rating: null, review: null },
-            test: {one: false, two: false, three: false, four: false, five: false}
         }
         
     },
@@ -26,10 +26,10 @@ var app9 = new Vue({
             //.get('https://15euros.nl/api/api_bier.php')
             .get(this.adress+'/api.php?action=getBeer')
             .then( response => {
-                this.biertjes = response.data.data;
+                biertjes = response.data.data;
 
                 let rating;
-                this.biertjes.forEach(element => {
+                biertjes.forEach(element => {
                     if (element.reviews) {
                         rating = 0;
                         element["reviewAmount"] = element.reviews.length;
@@ -51,26 +51,35 @@ var app9 = new Vue({
                     element["reviewed"] = false;
                 });
                 console.log(this.biertjes);
+                this.biertjes = biertjes;
+
             })
             .catch(error => {
                 // console.log(error);
             });
 
         axios
-        .get(this.adress+'/api.php?action=loginData')
-        .then( response => {
-            this.logindata = response.data;
-            console.log(response.data);
-        })
-        .catch(error => {
-            // console.log(error);
+            .get(this.adress+'/api.php?action=loginData')
+            .then( response => {
+                this.logindata = response.data;
+                console.log(response.data);
+            })
+            .catch(error => {
+                // console.log(error);
         });
 
+        axios   
+            .get(this.adress+'/api.php?action=getBrouwers')
+            .then( response => {
+                this.brouwers = response.data.data;
+                console.log(response.data.data);
+            })
 
     },
     methods: {
         updBier: function(bier) {
-            // console.log(bier);
+            console.log("test");
+            console.log(bier);
             this.selBier = bier;
         },
         delBier: function(bier) {
@@ -165,9 +174,11 @@ var app9 = new Vue({
         fRating: function(bier, rating) {
             bier.newRating = rating;
         },
-        test1: function(bier) {
-            console.log(bier);
-            bier.naam = "test";
+        test: function() {
+ 
+            this.biertjes = this.biertjes.filter(i => i.naam.toUpperCase().includes("abondance".toUpperCase()));
+
+            console.log(this.bierjes);
         },
     }
 });
@@ -386,7 +397,6 @@ Vue.component('inlog', {
     data: function() {
         return {
             data : {login : true, gebruikersnaam : null, wachtwoord : null},
-            test : {logged_in : false, user_id : null, username : null},
         }
     },
     methods: {
@@ -408,11 +418,7 @@ Vue.component('inlog', {
             axios
             .post("api/api.php?action=login", this.data)
             .then( response => {
-                this.logindata.logged_in = response.data.data.logged_in;
-                this.logindata.user_id = response.data.data.user_id;
-                this.logindata.username = response.data.data.username;
 
-                console.log(response.data.data);
             })
             .catch(error => {
                 // console.log(error);
@@ -421,6 +427,8 @@ Vue.component('inlog', {
         }
     }
 });
+
+
 
 
 

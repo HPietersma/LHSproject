@@ -13,7 +13,8 @@ body {
 .beerContainer {
     background-color: rgba(210, 210, 210, 0);
     width: 500px;
-    margin: auto;
+    position: absolute;
+    left: calc(50% - 250px);
 }
 
 .beerList {

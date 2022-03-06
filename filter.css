@@ -1,0 +1,7 @@
+.filterDiv {
+    height: 500px;
+    width: 300px;
+    background-color: rgb(230, 230, 230);
+    position: absolute;
+    left: calc(50% - 550px);
+}

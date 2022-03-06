@@ -22,8 +22,8 @@ function edit() {
     }
     else {
         link.style.visibility =  "visible";
-        document.getElementById("delete").style.visibility = "hidden";
-        document.getElementById("add").style.visibility = "hidden";
+        //document.getElementById("delete").style.visibility = "hidden";
+        //document.getElementById("add").style.visibility = "hidden";
     }
 }
 

@@ -621,6 +621,30 @@ if( $_GET["action"] == "addUser" ) {
     } 
 }
 
+if( $_GET["action"] == "getBrouwers" ) {
+    $sql = "SELECT DISTINCT brouwer 
+    FROM `bier` ";
+    $res = mysqli_query($con, $sql);    // uitvoeren van query op $con die in db.php geset is
+    if($res) {
+        $lst = array();
+        while($rij = mysqli_fetch_assoc($res)) {
+            $lst[] =  $rij; // zorgt dat foute characterset omgezet wordt naar UTF8
+        }
+        $json = array(
+            "sMessage"=>"Biertjes zijn opgehaald",
+            "bSuccess"=>true,
+            "data"=>$lst
+        );
+    } else {
+        $json = array(
+            "sMessage"=>"Biertjes zijn NIET opgehaald. SQL: ".$sql,
+            "bSuccess"=>false,
+            "data"=>null
+        );
+    }
+}
+
+
 
 
 

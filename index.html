@@ -15,6 +15,8 @@
     <link rel="stylesheet" href="nav.css" type="text/css">
     <link rel="stylesheet" href="login.css" type="text/css">
     <link rel="stylesheet" href="registration.css" type="text/css">
+    <link rel="stylesheet" href="filter.css" type="text/css">
+
 
 
     <script src="https://kit.fontawesome.com/779b41c1bd.js" crossorigin="anonymous"></script> 
@@ -62,9 +64,9 @@
 
 
             <!-- selBier = {{ selBier }} -->
-
-            <!-- <beer-form id="edit" v-bind:biertje="selBier"></beer-form>
-            <beer-delete id="delete" v-bind:biertje="selBier"></beer-delete>
+            
+            <beer-form id="edit" v-bind:biertje="selBier"></beer-form>
+            <!-- <beer-delete id="delete" v-bind:biertje="selBier"></beer-delete>
             <beer-add id="add" v-bind:biertje="selBier"></beer-add> -->
 
             <!-- <table id="beerTable">
@@ -92,6 +94,7 @@
          
                 </tr>   
             </table> -->
+
 
 
             
@@ -243,20 +246,28 @@
                                                 <button v-on:click="sendReview(bier)">verstuur</button>
                                             </div>
                                         </div>
-                                    
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="mods">
-                            <i class="fas fa-ellipsis-v" onclick="showEdit(this)"></i>
+                        <div class="mods" onmouseleave="hideEdit(this)">
+                            <i class="fas fa-ellipsis-v" onmouseenter="showEdit(this)"></i>
                             <div class="edit">
-                                <div v-on:click="test1(bier)">Aanpassen</div>
+                                <div onclick="edit()" v-on:click="updBier(bier)">Aanpassen</div>
                                 <div>Verwijderen</div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="filterDiv">
+                filter:<br>
+                <button v-on:click="test()">test</button> beoordeling<br>
+                <input type="checkbox">aantal likes<br>
+                <input type="checkbox">prijs<br>
+
+
+
             </div>
         </div>
     </div>

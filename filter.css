@@ -1,7 +1,88 @@
 .filterDiv {
     height: 500px;
-    width: 300px;
+    width: 250px;
     background-color: rgb(230, 230, 230);
     position: absolute;
-    left: calc(50% - 550px);
+    left: calc(50% - 500px);
+}
+
+.sortDiv {
+    text-align: center;
+}
+
+.sorteer {
+    background-color: #f7d69a;
+}
+
+.sortDiv h4 {
+    margin: 0;
+    padding: 5px;
+}
+
+.sortDiv button {
+    width: 100%;
+    border-bottom: 2px solid rgb(230, 230, 230);
+    border-left: 2px solid rgb(230, 230, 230);
+    border-right: 2px solid rgb(230, 230, 230);
+    border-top: none;
+    background-color: rgb(230, 230, 230);
+    border-radius: none;
+}
+
+.sortDiv button:first-of-type {
+    border-top: 2px solid rgb(230, 230, 230);
+}
+
+.sortDiv button:hover {
+    border: 2px solid orange;
+}
+
+.filter {
+    text-align: center;
+}
+
+.filter h4 {
+    margin: 0;
+    padding: 5px;
+    user-select: none;
+}
+
+.gisting {
+    margin-top: 5px;
+    background-color: #f7d69a;
+    border: 2px solid #f7d69a;
+}
+
+.gisting:hover {
+    border: 2px solid orange;
+}
+
+.filter button {
+    width: 100%;
+    border: none;
+    border-radius: none;
+    background-color: rgb(230, 230, 230);
+}
+
+#gistingButtons {
+    display: none;
+    background-color: rgb(230, 230, 230);
+}
+
+#gistingButtons button {
+    border: 2px solid rgb(230, 230, 230);
+}
+
+#gistingButtons button:hover {
+    border: 2px solid orange;
+}
+
+.type {
+    margin-top: 3px;
+    background-color: #f7d69a;
+    border: 2px solid #f7d69a;
+}
+
+.type:hover {
+    border: 2px solid orange;
 }

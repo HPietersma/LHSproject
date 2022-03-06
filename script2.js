@@ -90,3 +90,33 @@ function showEdit(element) {
 function hideEdit(element) {
     element.children[1].style.visibility = "hidden";
 }
+
+function sort(element) {
+    element.parentElement.children[1].style.backgroundColor = "#e6e6e6";
+    element.parentElement.children[2].style.backgroundColor = "#e6e6e6";
+    element.parentElement.children[3].style.backgroundColor = "#e6e6e6";
+    element.parentElement.children[4].style.backgroundColor = "#e6e6e6";
+    element.parentElement.children[5].style.backgroundColor = "#e6e6e6";
+
+    element.style.backgroundColor = "#f7d69a";
+}
+
+function openGisting() {
+    div = document.getElementById("gistingButtons");
+
+    if (div.style.display == "block") {
+        div.style.display = "none"
+    } 
+    else {
+        div.style.display = "block"
+    }
+
+}
+
+function filterButton(element) {
+    document.getElementById("gistingButtons").style.visibility = "hidden";
+
+    element.parentElement.parentElement.children[0].children[0].innerHTML = "gisting: " + element.innerHTML;
+
+    console.log(element);
+}

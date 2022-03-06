@@ -261,10 +261,40 @@
                 </div>
             </div>
             <div class="filterDiv">
-                filter:<br>
-                <button v-on:click="test()">test</button> beoordeling<br>
-                <input type="checkbox">aantal likes<br>
-                <input type="checkbox">prijs<br>
+                <div class="sortDiv">
+                    <div class="sorteer">
+                        <h4>sorteer op:</h4> 
+                    </div>
+                    
+                    <button v-on:click="sort(1)" onclick="sort(this)">beoordeling</button>
+                    <button v-on:click="sort(2)" onclick="sort(this)">aantal likes</button>
+                    <button v-on:click="sort(3)" onclick="sort(this)">aantal reviews</button>
+                    <button v-on:click="sort(4)" onclick="sort(this)">prijs aflopend</button>
+                    <button v-on:click="sort(5)" onclick="sort(this)">prijs oplopend</button>
+                </div>
+                <div class="filter">
+                    <div class="gisting" onclick="openGisting()">
+                         <h4>gisting:</h4>
+                    </div>
+                    <div id="gistingButtons">
+                        <button v-on:click="filter(1)" onclick="filterButton(this)">hoge</button>
+                        <button v-on:click="filter()" onclick="filterButton(this)">hoge met nof</button>
+                        <button v-on:click="filter()" onclick="filterButton(this)">hoge + melkzure</button>
+                        <button v-on:click="filter()" onclick="filterButton(this)">hoge + spontane</button>
+                        <button v-on:click="filter()" onclick="filterButton(this)">spontane</button>
+                        <button v-on:click="filter()" onclick="filterButton(this)">spontane + nof</button>
+                        <button v-on:click="filter()" onclick="filterButton(this)">spontane + hoge</button>
+                        <button v-on:click="filter(2)" onclick="filterButton(this)">lage</button>
+                   </div>
+                   <div class="type">
+                        <h4>type:</h4>
+                   </div>
+                    
+         
+                </div>
+
+
+
 
 
 

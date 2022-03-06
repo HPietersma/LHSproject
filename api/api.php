@@ -117,7 +117,6 @@ if( $_GET["action"] == "logout" ) {
 
 
 
-
 // via de URL: https:// [pad naar API] api.php?action=getBeer kun je biertjes ophalen
 // verwacht GET variabele action. Deze kan je ook naar POST veranderen
 if( $_GET["action"] == "getBeerXXX" ) {
@@ -643,9 +642,6 @@ if( $_GET["action"] == "getBrouwers" ) {
         );
     }
 }
-
-
-
 
 
 

@@ -2,9 +2,9 @@ var app9 = new Vue({
     el: '#app',
     data () {
         return {
-            adress: 'api',
             logindata : {logged_in: false, user_id: null, username: null},
             biertjes: null, 
+            biertjesBackup: null,
             brouwers: null,
             fieldset: {
                 id: {field:"id", bShow:true, title: "id"},
@@ -24,7 +24,7 @@ var app9 = new Vue({
     created () { 
         axios
             //.get('https://15euros.nl/api/api_bier.php')
-            .get(this.adress+'/api.php?action=getBeer')
+            .get('api/api.php?action=getBeer')
             .then( response => {
                 biertjes = response.data.data;
 
@@ -43,15 +43,16 @@ var app9 = new Vue({
                         element["avgRating"] = Math.round(rating2);
                     }
                     else {
-                        element["reviewAmount"] = null;
-                        element["avgRating"] = null;
+                        element["reviewAmount"] = 0;
+                        element["avgRating"] = 0;
                     }
                     element["newReview"] = null;
                     element["newRating"] = null;
                     element["reviewed"] = false;
                 });
-                console.log(this.biertjes);
                 this.biertjes = biertjes;
+                this.biertjesBackup = biertjes;
+                console.log(this.biertjes);
 
             })
             .catch(error => {
@@ -59,7 +60,7 @@ var app9 = new Vue({
             });
 
         axios
-            .get(this.adress+'/api.php?action=loginData')
+            .get('api/api.php?action=loginData')
             .then( response => {
                 this.logindata = response.data;
                 console.log(response.data);
@@ -69,7 +70,7 @@ var app9 = new Vue({
         });
 
         axios   
-            .get(this.adress+'/api.php?action=getBrouwers')
+            .get('api/api.php?action=getBrouwers')
             .then( response => {
                 this.brouwers = response.data.data;
                 console.log(response.data.data);
@@ -100,7 +101,7 @@ var app9 = new Vue({
 
                 $.ajax({
                     method: "POST",
-                    url: this.adress + "/api.php?action=increaseLike",
+                    url: "api/api.php?action=increaseLike",
                     data: bier
                 })
                 .then(function (response) {
@@ -116,7 +117,7 @@ var app9 = new Vue({
 
                 $.ajax({
                     method: "POST",
-                    url: this.adress + "/api.php?action=deleteLike",
+                    url: "api/api.php?action=deleteLike",
                     data: bier
                 })
                 .then(function (response) {
@@ -131,7 +132,7 @@ var app9 = new Vue({
         logout: function() {
             $.ajax({
                 method: "POST",
-                url: this.adress + "/api.php?action=logout"
+                url: "api/api.php?action=logout"
             })
             .then(function (response) {
                 console.log(response);
@@ -146,7 +147,7 @@ var app9 = new Vue({
 
             $.ajax({
                 method: "POST",
-                url: this.adress + "/api.php?action=sendReview",
+                url: "api/api.php?action=sendReview",
                 data: bier
             })
             .then(function (response) {
@@ -174,11 +175,37 @@ var app9 = new Vue({
         fRating: function(bier, rating) {
             bier.newRating = rating;
         },
-        test: function() {
+        sort: function(filter) {
  
-            this.biertjes = this.biertjes.filter(i => i.naam.toUpperCase().includes("abondance".toUpperCase()));
+            //this.biertjes = this.biertjes.filter(i => i.naam.toUpperCase().includes("abondance".toUpperCase()));
+            //test123 = this.biertjes.sort((avgRating, a) => a - avgRating);
+            
+            if (filter === 1) {
+                this.biertjes.sort((a, b) => b.avgRating - a.avgRating);
+            }
+            if (filter === 2) {
+                this.biertjes.sort((a, b) => b.likes - a.likes);
+            }
+            if (filter === 3) {
+                this.biertjes.sort((a, b) => b.reviewAmount - a.reviewAmount);
+            }
+            if (filter === 4) {
+                this.biertjes.sort((a, b) => b.inkoop_prijs - a.inkoop_prijs);
+            }
+            if (filter === 5) {
+                this.biertjes.sort((a, b) => a.inkoop_prijs - b.inkoop_prijs);
+            }
+        },
+        filter: function(filter) {
+            if (filter === 1) {
+                beers = this.biertjesBackup;
+                this.biertjes = beers.filter(i => i.gisting == "hoge")
+            }
+            if (filter === 2) {
+                beers = this.biertjesBackup
+                this.biertjes = beers.filter(i => i.gisting == "lage")
+            }
 
-            console.log(this.bierjes);
         },
     }
 });

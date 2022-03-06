@@ -47,8 +47,30 @@
     user-select: none;
 }
 
+.brouwers {
+    background-color: #f7d69a;
+    border: 2px solid #f7d69a;
+}
+
+.brouwers:hover {
+    border: 2px solid orange;
+}
+
+#brouwerButtons {
+    display: none;
+    background-color: rgb(230, 230, 230);
+}
+
+#brouwerButtons button {
+    border: 2px solid rgb(230, 230, 230);
+}
+
+#brouwerButtons button:hover {
+    border: 2px solid orange;
+}
+
 .gisting {
-    margin-top: 5px;
+    margin-top: 3px;
     background-color: #f7d69a;
     border: 2px solid #f7d69a;
 }

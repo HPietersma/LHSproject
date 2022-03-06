@@ -273,6 +273,12 @@
                     <button v-on:click="sort(5)" onclick="sort(this)">prijs oplopend</button>
                 </div>
                 <div class="filter">
+                    <div class="brouwers" onclick="openBrouwers()">
+                        <h4>brouwers:</h4>
+                    </div>
+                    <div id="brouwerButtons">
+                        <button v-for="brouwer in brouwers">{{brouwer.brouwer}}</button>
+                    </div>
                     <div class="gisting" onclick="openGisting()">
                          <h4>gisting:</h4>
                     </div>
@@ -285,10 +291,10 @@
                         <button v-on:click="filter()" onclick="filterButton(this)">spontane + nof</button>
                         <button v-on:click="filter()" onclick="filterButton(this)">spontane + hoge</button>
                         <button v-on:click="filter(2)" onclick="filterButton(this)">lage</button>
-                   </div>
-                   <div class="type">
+                    </div>
+                    <div class="type">
                         <h4>type:</h4>
-                   </div>
+                    </div>
                     
          
                 </div>

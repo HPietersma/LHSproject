@@ -101,6 +101,18 @@ function sort(element) {
     element.style.backgroundColor = "#f7d69a";
 }
 
+function openBrouwers() {
+    div = document.getElementById("brouwerButtons");
+
+    if (div.style.display == "block") {
+        div.style.display = "none"
+    } 
+    else {
+        div.style.display = "block"
+    }
+}
+
+
 function openGisting() {
     div = document.getElementById("gistingButtons");
 

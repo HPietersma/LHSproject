@@ -620,6 +620,8 @@ if( $_GET["action"] == "addUser" ) {
     } 
 }
 
+
+
 if( $_GET["action"] == "getBrouwers" ) {
     $sql = "SELECT DISTINCT brouwer 
     FROM `bier` ";

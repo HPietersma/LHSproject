@@ -84,12 +84,70 @@ function colorStar(element, rating) {
 }
 
 function showEdit(element) {
-    editDiv = element.parentElement.children[1];
+    element.parentElement.children[1].style.visibility = "visible";
+}
 
-    if (editDiv.style.visibility == "visible") {
-        editDiv.style.visibility = "hidden"
-    }
+function hideEdit(element) {
+    element.children[1].style.visibility = "hidden";
+}
+
+function sort(element) {
+    element.parentElement.children[1].style.backgroundColor = "#e6e6e6";
+    element.parentElement.children[2].style.backgroundColor = "#e6e6e6";
+    element.parentElement.children[3].style.backgroundColor = "#e6e6e6";
+    element.parentElement.children[4].style.backgroundColor = "#e6e6e6";
+    element.parentElement.children[5].style.backgroundColor = "#e6e6e6";
+
+    element.style.backgroundColor = "#f7d69a";
+}
+
+function openBrouwers() {
+    div = document.getElementById("brouwerButtons");
+
+    if (div.style.display == "block") {
+        div.style.display = "none"
+    } 
     else {
-        editDiv.style.visibility = "visible"
+        div.style.display = "block"
     }
+}
+
+function brouwerButton(element) {
+    document.getElementById("brouwerButtons").style.display = "none";
+    document.getElementById("brouwers").innerHTML = "<h4>brouwer: " + element.innerHTML + "</h4>";
+}
+
+
+function openGisting() {
+    div = document.getElementById("gistingButtons");
+
+    if (div.style.display == "block") {
+        div.style.display = "none"
+    } 
+    else {
+        div.style.display = "block"
+    }
+
+}
+
+function gistingButton(element) {
+    document.getElementById("gistingButtons").style.display = "none";
+    document.getElementById("gisting").innerHTML = "<h4>gisting: " + element.innerHTML + "</h4>";
+}
+
+function openType() {
+    div = document.getElementById("typeButtons");
+
+    if (div.style.display == "block") {
+        div.style.display = "none"
+    } 
+    else {
+        div.style.display = "block"
+    }
+
+}
+
+function typeButton(element) {
+    document.getElementById("typeButtons").style.display = "none";
+    document.getElementById("type").innerHTML = "<h4>type: " + element.innerHTML + "</h4>";
 }

@@ -35,14 +35,14 @@ if( $_GET["action"] == "login" ) {
 
     //session_start();
 
-    $request_body = file_get_contents('php://input');
-    $data = json_decode($request_body, true);
+    //$request_body = file_get_contents('php://input');
+    //$data = json_decode($request_body, true);
 
 
-    //$username = $_POST["gebruikersnaam"];
-    //$password = $_POST["wachtwoord"];
-    $username = $data['gebruikersnaam'];
-    $password = $data['wachtwoord'];
+    $username = $_POST["gebruikersnaam"];
+    $password = $_POST["wachtwoord"];
+    // $username = $data['gebruikersnaam'];
+    // $password = $data['wachtwoord'];
 
     $sql = "SELECT *
             FROM `users` 
@@ -58,6 +58,7 @@ if( $_GET["action"] == "login" ) {
         while($rij = mysqli_fetch_assoc($res)) {
             $_SESSION['username'] = $rij['gebruikersnaam'];
             $_SESSION['user_id'] = $rij['id'];
+            $_SESSION['role'] = $rij['role'];
         }
 
         $json = array(
@@ -79,14 +80,22 @@ if( $_GET["action"] == "loginData" ) {
     $json = array(
         "logged_in"=>false,
         "user_id"=>null,
-        "username"=>null
+        "username"=>null,
+        "role"=>null
     );
 
     if(isset($_SESSION['logged_in'])) {
+        if ($_SESSION['role'] == 1) {
+            $_SESSION['role'] = true;
+        } 
+        else {
+            $_SESSION['role'] = false;
+        }
         $json = array(
             "logged_in"=>true,
             "user_id"=>$_SESSION["user_id"],
-            "username"=>$_SESSION["username"]
+            "username"=>$_SESSION["username"],
+            "role"=>$_SESSION["role"]
         );
     }
 
@@ -94,10 +103,12 @@ if( $_GET["action"] == "loginData" ) {
 
 if( $_GET["action"] == "logout" ) {
    
-    session_destroy();
-
+    //session_unset();
+    unset($_SESSION['logged_in']);
+    unset($_SESSION['user_id']);
+    unset($_SESSION['username']);
+    unset($_SESSION['role']);
 }
-
 
 
 
@@ -373,7 +384,7 @@ if( $_GET["action"] == "sendReview" ) {
     $last_id;
 
     $sql = "INSERT INTO reviews SET
-                    beer_id 	= '" . $_POST["id"] . "',
+                    beer_id = '" . $_POST["id"] . "',
                     user_id = '" . $_SESSION["user_id"] . "',
                     rating	= '" . $_POST["newRating"] . "',
                     review = '" . $_POST["newReview"] . "';";
@@ -623,6 +634,74 @@ if( $_GET["action"] == "addUser" ) {
 
 
 
+if( $_GET["action"] == "getBrouwers" ) {
+    $sql = "SELECT DISTINCT brouwer 
+    FROM `bier` ";
+    $res = mysqli_query($con, $sql);    // uitvoeren van query op $con die in db.php geset is
+    if($res) {
+        $lst = array();
+        while($rij = mysqli_fetch_assoc($res)) {
+            $lst[] =  $rij; // zorgt dat foute characterset omgezet wordt naar UTF8
+        }
+        $json = array(
+            "sMessage"=>"Biertjes zijn opgehaald",
+            "bSuccess"=>true,
+            "data"=>$lst
+        );
+    } else {
+        $json = array(
+            "sMessage"=>"Biertjes zijn NIET opgehaald. SQL: ".$sql,
+            "bSuccess"=>false,
+            "data"=>null
+        );
+    }
+}
+
+if( $_GET["action"] == "getGisting" ) {
+    $sql = "SELECT DISTINCT gisting 
+    FROM `bier` ";
+    $res = mysqli_query($con, $sql);    // uitvoeren van query op $con die in db.php geset is
+    if($res) {
+        $lst = array();
+        while($rij = mysqli_fetch_assoc($res)) {
+            $lst[] =  $rij; // zorgt dat foute characterset omgezet wordt naar UTF8
+        }
+        $json = array(
+            "sMessage"=>"Biertjes zijn opgehaald",
+            "bSuccess"=>true,
+            "data"=>$lst
+        );
+    } else {
+        $json = array(
+            "sMessage"=>"Biertjes zijn NIET opgehaald. SQL: ".$sql,
+            "bSuccess"=>false,
+            "data"=>null
+        );
+    }
+}
+
+if( $_GET["action"] == "getType" ) {
+    $sql = "SELECT DISTINCT type 
+    FROM `bier` ";
+    $res = mysqli_query($con, $sql);    // uitvoeren van query op $con die in db.php geset is
+    if($res) {
+        $lst = array();
+        while($rij = mysqli_fetch_assoc($res)) {
+            $lst[] =  $rij; // zorgt dat foute characterset omgezet wordt naar UTF8
+        }
+        $json = array(
+            "sMessage"=>"Biertjes zijn opgehaald",
+            "bSuccess"=>true,
+            "data"=>$lst
+        );
+    } else {
+        $json = array(
+            "sMessage"=>"Biertjes zijn NIET opgehaald. SQL: ".$sql,
+            "bSuccess"=>false,
+            "data"=>null
+        );
+    }
+}
 
 
 

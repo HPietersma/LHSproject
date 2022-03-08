@@ -2,9 +2,13 @@ var app9 = new Vue({
     el: '#app',
     data () {
         return {
-            adress: 'api',
-            logindata : {logged_in: false, user_id: null, username: null},
+            logindata : {logged_in: false, user_id: null, username: null, role: false},
             biertjes: null, 
+            biertjesBackup: null,
+            brouwers: null,
+            gistings: null,
+            types: null,
+            searchObject: "",
             fieldset: {
                 id: {field:"id", bShow:true, title: "id"},
                 naam: {field:"naam", bShow:true, title: "naam"},
@@ -17,19 +21,18 @@ var app9 = new Vue({
             },
             selBier: {},
             reviewData: {beer_id: null, rating: null, review: null },
-            test: {one: false, two: false, three: false, four: false, five: false}
         }
         
     },
     created () { 
         axios
             //.get('https://15euros.nl/api/api_bier.php')
-            .get(this.adress+'/api.php?action=getBeer')
+            .get('api/api.php?action=getBeer')
             .then( response => {
-                this.biertjes = response.data.data;
+                biertjes = response.data.data;
 
                 let rating;
-                this.biertjes.forEach(element => {
+                biertjes.forEach(element => {
                     if (element.reviews) {
                         rating = 0;
                         element["reviewAmount"] = element.reviews.length;
@@ -43,34 +46,58 @@ var app9 = new Vue({
                         element["avgRating"] = Math.round(rating2);
                     }
                     else {
-                        element["reviewAmount"] = null;
-                        element["avgRating"] = null;
+                        element["reviewAmount"] = 0;
+                        element["avgRating"] = 0;
                     }
                     element["newReview"] = null;
                     element["newRating"] = null;
                     element["reviewed"] = false;
                 });
+                this.biertjes = biertjes;
+                this.biertjesBackup = biertjes;
                 console.log(this.biertjes);
+
             })
             .catch(error => {
                 // console.log(error);
             });
 
         axios
-        .get(this.adress+'/api.php?action=loginData')
-        .then( response => {
-            this.logindata = response.data;
-            console.log(response.data);
-        })
-        .catch(error => {
-            // console.log(error);
+            .get('api/api.php?action=loginData')
+            .then( response => {
+                this.logindata = response.data;
+                console.log(response.data);
+            })
+            .catch(error => {
+                // console.log(error);
         });
 
+        axios   
+            .get('api/api.php?action=getBrouwers')
+            .then( response => {
+                this.brouwers = response.data.data;
+                console.log(response.data.data);
+        });
+
+        axios   
+            .get('api/api.php?action=getGisting')
+            .then( response => {
+                this.gistings = response.data.data;
+                console.log(response.data.data);
+        });
+
+        axios   
+            .get('api/api.php?action=getType')
+            .then( response => {
+                this.types = response.data.data;
+                console.log(response.data.data);
+        });
 
     },
     methods: {
         updBier: function(bier) {
-            // console.log(bier);
+            console.log("test");
+            console.log(bier);
             this.selBier = bier;
         },
         delBier: function(bier) {
@@ -91,7 +118,7 @@ var app9 = new Vue({
 
                 $.ajax({
                     method: "POST",
-                    url: this.adress + "/api.php?action=increaseLike",
+                    url: "api/api.php?action=increaseLike",
                     data: bier
                 })
                 .then(function (response) {
@@ -107,7 +134,7 @@ var app9 = new Vue({
 
                 $.ajax({
                     method: "POST",
-                    url: this.adress + "/api.php?action=deleteLike",
+                    url: "api/api.php?action=deleteLike",
                     data: bier
                 })
                 .then(function (response) {
@@ -122,7 +149,7 @@ var app9 = new Vue({
         logout: function() {
             $.ajax({
                 method: "POST",
-                url: this.adress + "/api.php?action=logout"
+                url: "api/api.php?action=logout"
             })
             .then(function (response) {
                 console.log(response);
@@ -130,14 +157,16 @@ var app9 = new Vue({
             .catch(function (error) {
                 console.log(error);
             });
-            location.reload();
+            setTimeout(() => {
+                location.reload();
+            }, 500);
         },
         sendReview: function(bier) {
             console.log(bier);
 
             $.ajax({
                 method: "POST",
-                url: this.adress + "/api.php?action=sendReview",
+                url: "api/api.php?action=sendReview",
                 data: bier
             })
             .then(function (response) {
@@ -165,10 +194,65 @@ var app9 = new Vue({
         fRating: function(bier, rating) {
             bier.newRating = rating;
         },
-        test1: function(bier) {
-            console.log(bier);
-            bier.naam = "test";
+        sort: function(filter) {
+ 
+            //this.biertjes = this.biertjes.filter(i => i.naam.toUpperCase().includes("abondance".toUpperCase()));
+            //test123 = this.biertjes.sort((avgRating, a) => a - avgRating);
+            
+            if (filter === 1) {
+                this.biertjes.sort((a, b) => b.avgRating - a.avgRating);
+            }
+            if (filter === 2) {
+                this.biertjes.sort((a, b) => b.likes - a.likes);
+            }
+            if (filter === 3) {
+                this.biertjes.sort((a, b) => b.reviewAmount - a.reviewAmount);
+            }
+            if (filter === 4) {
+                this.biertjes.sort((a, b) => b.inkoop_prijs - a.inkoop_prijs);
+            }
+            if (filter === 5) {
+                this.biertjes.sort((a, b) => a.inkoop_prijs - b.inkoop_prijs);
+            }
         },
+        filterBrouwer: function(brouwer) {
+            beers = this.biertjesBackup;
+
+            if (brouwer == 1) {
+                this.biertjes = beers;
+            }
+            else {
+                this.biertjes = beers.filter(i => i.brouwer == brouwer);
+            }
+        },
+        filterGisting: function(gisting) {
+            beers = this.biertjesBackup;
+
+            if (gisting == 1) {
+                this.biertjes = beers;
+            }
+            else {
+                this.biertjes = beers.filter(i => i.gisting == gisting);
+            }
+        },
+        filterType: function(type) {
+            beers = this.biertjesBackup;
+
+            if (type == 1) {
+                this.biertjes = beers;
+            }
+            else {
+                this.biertjes = beers.filter(i => i.type == type);
+            }
+        },
+        searchFilter: function() {
+            if (this.searchObject == "") {
+                this.biertjes = this.biertjesBackup;
+            } 
+            else {
+            this.biertjes = this.biertjesBackup.filter(i => i.naam.toUpperCase().includes(this.searchObject.toUpperCase()));
+            }
+        }
     }
 });
 
@@ -235,7 +319,7 @@ Vue.component('beer-delete', {
                 <td>Weet u zeker dat u dit item wilt verwijderen?</td>
             </tr>
             <tr>
-                <td><input type="submit" value="JA" v-on:click="deleteBeer"><input type="submit" value="NEE" onclick="del()"></td>
+                <td><input type="submit" value="JA" v-on:click="deleteBeer" onclick="del()"><input type="submit" value="NEE" onclick="del()"></td>
             </tr>
         </table>
     ` ,
@@ -385,42 +469,40 @@ Vue.component('inlog', {
         ` ,
     data: function() {
         return {
-            data : {login : true, gebruikersnaam : null, wachtwoord : null},
-            test : {logged_in : false, user_id : null, username : null},
+            data : {"login" : true, "gebruikersnaam" : null, "wachtwoord" : null, "role": null},
         }
     },
     methods: {
         login: function() {
             console.log(this.data);
-            // $.ajax({
-            //     method: "POST",
-            //     url: "http://localhost:81/bier_project/login.php",
-            //     data: this.data
-            // })
-            // .then(function (response) {
-            //     this.test = response.data;
-            //     console.log(response.data);
-            // })
-            // .catch(function (error) {
-            //     console.log(error);
-            // });
-
-            axios
-            .post("api/api.php?action=login", this.data)
-            .then( response => {
-                this.logindata.logged_in = response.data.data.logged_in;
-                this.logindata.user_id = response.data.data.user_id;
-                this.logindata.username = response.data.data.username;
-
-                console.log(response.data.data);
+            $.ajax({
+                method: "POST",
+                url: "api/api.php?action=login",
+                data: this.data
             })
-            .catch(error => {
-                // console.log(error);
+            .then(function (response) {
+                console.log(response.data);
+            })
+            .catch(function (error) {
+                console.log(error);
             });
-            location.reload();
+
+            // axios
+            // .post("api/api.php?action=login", this.data)
+            // .then( response => {
+
+            // })
+            // .catch(error => {
+            //     // console.log(error);
+            // });
+            setTimeout(() => {
+                location.reload();
+            }, 500);
         }
     }
 });
+
+
 
 
 

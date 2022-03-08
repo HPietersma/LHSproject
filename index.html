@@ -66,8 +66,8 @@
             <!-- selBier = {{ selBier }} -->
             
             <beer-form id="edit" v-bind:biertje="selBier"></beer-form>
-            <!-- <beer-delete id="delete" v-bind:biertje="selBier"></beer-delete>
-            <beer-add id="add" v-bind:biertje="selBier"></beer-add> -->
+            <beer-delete id="delete" v-bind:biertje="selBier"></beer-delete>
+            <beer-add id="add" v-bind:biertje="selBier"></beer-add>
 
             <!-- <table id="beerTable">
                 <tr>
@@ -104,8 +104,8 @@
             <div class="nav">
                 <button class="btnInlog" onclick="showInlog()" v-if="!logindata.logged_in">Inloggen</button>
                 <button class="btnInlog" v-on:click="logout" v-if="logindata.logged_in">Uitloggen</button>
+                <button class="btnInlog" v-on:click="addBier" v-if="logindata.role" onclick="add()">Bier toevoegen</button>
             </div>
-
             <div class="beerContainer">
                 <div class="beerList">
                     <div class="beer" v-for="bier in biertjes">
@@ -240,7 +240,7 @@
                                                 </div>
                                             </div>
                                             <div class="reviewText">
-                                                <textarea name="" id="textarea" placeholder="Schrijf een review" v-model="bier.newReview"></textarea>
+                                                <textarea name="" id="textarea" placeholder="Schrijf een review" v-model.lazy="bier.newReview"></textarea>
                                             </div>
                                             <div>
                                                 <button v-on:click="sendReview(bier)">verstuur</button>
@@ -250,22 +250,24 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="mods" onmouseleave="hideEdit(this)">
+                        <div class="mods" onmouseleave="hideEdit(this)" v-if="logindata.role">
                             <i class="fas fa-ellipsis-v" onmouseenter="showEdit(this)"></i>
                             <div class="edit">
                                 <div onclick="edit()" v-on:click="updBier(bier)">Aanpassen</div>
-                                <div>Verwijderen</div>
+                                <div onclick="del()" v-on:click="delBier(bier)">Verwijderen</div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="filterDiv">
+                <div class="searchbar">
+                    <input type="text" placeholder="zoeken.." v-model.lazy="searchObject" v-on:keyup.enter="searchFilter()">
+                </div>
                 <div class="sortDiv">
                     <div class="sorteer">
                         <h4>sorteer op:</h4> 
                     </div>
-                    
                     <button v-on:click="sort(1)" onclick="sort(this)">beoordeling</button>
                     <button v-on:click="sort(2)" onclick="sort(this)">aantal likes</button>
                     <button v-on:click="sort(3)" onclick="sort(this)">aantal reviews</button>
@@ -273,37 +275,28 @@
                     <button v-on:click="sort(5)" onclick="sort(this)">prijs oplopend</button>
                 </div>
                 <div class="filter">
-                    <div class="brouwers" onclick="openBrouwers()">
-                        <h4>brouwers:</h4>
+                    <div id="brouwers" onclick="openBrouwers()">
+                        <h4>brouwer:</h4>
                     </div>
                     <div id="brouwerButtons">
-                        <button v-for="brouwer in brouwers">{{brouwer.brouwer}}</button>
+                        <button onclick="brouwerButton(this)" v-on:click="filterBrouwer(1)">allemaal</button>
+                        <button v-for="brouwer in brouwers" onclick="brouwerButton(this)" v-on:click="filterBrouwer(brouwer.brouwer)">{{brouwer.brouwer}}</button>
                     </div>
-                    <div class="gisting" onclick="openGisting()">
+                    <div id="gisting" onclick="openGisting()">
                          <h4>gisting:</h4>
                     </div>
                     <div id="gistingButtons">
-                        <button v-on:click="filter(1)" onclick="filterButton(this)">hoge</button>
-                        <button v-on:click="filter()" onclick="filterButton(this)">hoge met nof</button>
-                        <button v-on:click="filter()" onclick="filterButton(this)">hoge + melkzure</button>
-                        <button v-on:click="filter()" onclick="filterButton(this)">hoge + spontane</button>
-                        <button v-on:click="filter()" onclick="filterButton(this)">spontane</button>
-                        <button v-on:click="filter()" onclick="filterButton(this)">spontane + nof</button>
-                        <button v-on:click="filter()" onclick="filterButton(this)">spontane + hoge</button>
-                        <button v-on:click="filter(2)" onclick="filterButton(this)">lage</button>
+                        <button onclick="gistingButton(this)" v-on:click="filterGisting(1)">allemaal</button>
+                        <button v-for="gisting in gistings" onclick="gistingButton(this)" v-on:click="filterGisting(gisting.gisting)">{{gisting.gisting}}</button>
                     </div>
-                    <div class="type">
+                    <div id="type" onclick="openType()">
                         <h4>type:</h4>
                     </div>
-                    
-         
+                    <div id="typeButtons">
+                        <button onclick="typeButton(this)" v-on:click="filterType(1)">allemaal</button>
+                        <button v-for="type in types" onclick="typeButton(this)" v-on:click="filterType(type.type)">{{type.type}}</button>
+                    </div>
                 </div>
-
-
-
-
-
-
             </div>
         </div>
     </div>

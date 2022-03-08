@@ -74,17 +74,17 @@
 
 #add {
     position: fixed;
+    background-color: white;
     top: 200px;
-    background-color: rgb(46, 46, 46);
     width: 500px;
     height: 350px;
     left: calc(50% - 250px);
     border-collapse: collapse;
     padding: 0;
-    border-top: 20px solid rgb(46, 46, 46);
-    border-bottom: 20px solid rgb(46, 46, 46);
-    color: white;
+    border-top: 20px solid white;
+    border-bottom: 20px solid white;
     visibility: hidden;
+    z-index: 3;
 }
 
 
@@ -95,9 +95,6 @@
 #add input[type=text] {
     height: 25px;
     width: 300px;
-    background-color: rgb(92, 92, 92);
-    border: none;
-    color: white;
     font-weight: bolder;
 }
 
@@ -107,7 +104,7 @@
     margin-left: 56px;
     border: none;
     color: white;
-    background-color: rgb(92, 92, 92);
+    background-color: orange;
     font-size: medium;
     font-weight: bolder;
     margin-top: 10px;
@@ -115,7 +112,7 @@
 }
 
 #add input[type="submit"]:hover {
-    background-color: rgb(131, 131, 131);
+    background-color: rgba(255, 166, 0, 0.603);
 }
 
 .addText {
@@ -135,21 +132,21 @@
 #edit {
     position: fixed;
     top: 200px;
-    background-color: rgb(46, 46, 46);
+    background-color: white;
     width: 500px;
     height: 300px;
     left: calc(50% - 250px);
     border-collapse: collapse;
     padding: 0;
-    border-top: 20px solid rgb(46, 46, 46);
-    border-bottom: 20px solid rgb(46, 46, 46);
-    color: white;
+    border-top: 20px solid white;
+    border-bottom: 20px solid white;
     visibility: hidden;
     z-index: 3;
 }
 
 .cross {
     position: absolute;
+    color: white;
     width: 31px;
     height: 31px;
     background-color: rgba(255, 0, 0, 0.842);
@@ -173,9 +170,6 @@
 #edit input[type=text] {
     height: 25px;
     width: 300px;
-    background-color: rgb(92, 92, 92);
-    border: none;
-    color: white;
     font-weight: bolder;
 }
 
@@ -185,7 +179,7 @@
     margin-left: 56px;
     border: none;
     color: white;
-    background-color: rgb(92, 92, 92);
+    background-color: orange;
     font-size: medium;
     font-weight: bolder;
     margin-top: 10px;
@@ -193,7 +187,7 @@
 }
 
 #edit input[type="submit"]:hover {
-    background-color: rgb(131, 131, 131);
+    background-color: rgba(255, 166, 0, 0.603);
 }
 
 .editText {
@@ -260,7 +254,7 @@ input:checked + .slider:before {
 
 
 #delete {
-    background-color: rgb(46, 46, 46);
+    background-color: white;
     border-collapse: collapse;
     width: 400px;
     height: 100px;
@@ -268,10 +262,10 @@ input:checked + .slider:before {
     top: 200px;
     left: calc(50% - 200px);
     text-align: center;
-    color: white;
-    border-top: 20px solid rgb(46, 46, 46);
-    border-bottom: 20px solid rgb(46, 46, 46);
+    border-top: 20px solid white;
+    border-bottom: 20px solid white;
     visibility: hidden;
+    z-index: 3;
 }
 
 #delete td {
@@ -283,14 +277,14 @@ input:checked + .slider:before {
     height: 50px;
     margin: 5px;
     border: none;
-    background-color: rgb(92, 92, 92);
     color: white;
+    background-color: orange;
     font-size: larger;
     font-weight: bolder;
 }
 
 #delete input[type="submit"]:hover {
-    background-color: rgb(131, 131, 131);
+    background-color: rgba(255, 166, 0, 0.603);
 }
 
 /* .fa-thumbs-up {

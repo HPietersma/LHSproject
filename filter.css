@@ -1,9 +1,15 @@
 .filterDiv {
-    height: 500px;
     width: 250px;
     background-color: rgb(230, 230, 230);
     position: absolute;
     left: calc(50% - 500px);
+}
+
+.searchbar input[type="text"] {
+    width: calc(100% - 18px);
+    height: 25px;
+    border-radius: none;
+    margin: 5px;
 }
 
 .sortDiv {
@@ -47,12 +53,12 @@
     user-select: none;
 }
 
-.brouwers {
+#brouwers {
     background-color: #f7d69a;
     border: 2px solid #f7d69a;
 }
 
-.brouwers:hover {
+#brouwers:hover {
     border: 2px solid orange;
 }
 
@@ -69,13 +75,13 @@
     border: 2px solid orange;
 }
 
-.gisting {
+#gisting {
     margin-top: 3px;
     background-color: #f7d69a;
     border: 2px solid #f7d69a;
 }
 
-.gisting:hover {
+#gisting:hover {
     border: 2px solid orange;
 }
 
@@ -99,12 +105,25 @@
     border: 2px solid orange;
 }
 
-.type {
+#type {
     margin-top: 3px;
     background-color: #f7d69a;
     border: 2px solid #f7d69a;
 }
 
-.type:hover {
+#type:hover {
+    border: 2px solid orange;
+}
+
+#typeButtons {
+    display: none;
+    background-color: rgb(230, 230, 230);
+}
+
+#typeButtons button {
+    border: 2px solid rgb(230, 230, 230);
+}
+
+#typeButtons button:hover {
     border: 2px solid orange;
 }

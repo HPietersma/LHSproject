@@ -2,10 +2,13 @@ var app9 = new Vue({
     el: '#app',
     data () {
         return {
-            logindata : {logged_in: false, user_id: null, username: null},
+            logindata : {logged_in: false, user_id: null, username: null, role: false},
             biertjes: null, 
             biertjesBackup: null,
             brouwers: null,
+            gistings: null,
+            types: null,
+            searchObject: "",
             fieldset: {
                 id: {field:"id", bShow:true, title: "id"},
                 naam: {field:"naam", bShow:true, title: "naam"},
@@ -74,7 +77,21 @@ var app9 = new Vue({
             .then( response => {
                 this.brouwers = response.data.data;
                 console.log(response.data.data);
-            })
+        });
+
+        axios   
+            .get('api/api.php?action=getGisting')
+            .then( response => {
+                this.gistings = response.data.data;
+                console.log(response.data.data);
+        });
+
+        axios   
+            .get('api/api.php?action=getType')
+            .then( response => {
+                this.types = response.data.data;
+                console.log(response.data.data);
+        });
 
     },
     methods: {
@@ -140,7 +157,9 @@ var app9 = new Vue({
             .catch(function (error) {
                 console.log(error);
             });
-            location.reload();
+            setTimeout(() => {
+                location.reload();
+            }, 500);
         },
         sendReview: function(bier) {
             console.log(bier);
@@ -196,17 +215,44 @@ var app9 = new Vue({
                 this.biertjes.sort((a, b) => a.inkoop_prijs - b.inkoop_prijs);
             }
         },
-        filter: function(filter) {
-            if (filter === 1) {
-                beers = this.biertjesBackup;
-                this.biertjes = beers.filter(i => i.gisting == "hoge")
-            }
-            if (filter === 2) {
-                beers = this.biertjesBackup
-                this.biertjes = beers.filter(i => i.gisting == "lage")
-            }
+        filterBrouwer: function(brouwer) {
+            beers = this.biertjesBackup;
 
+            if (brouwer == 1) {
+                this.biertjes = beers;
+            }
+            else {
+                this.biertjes = beers.filter(i => i.brouwer == brouwer);
+            }
         },
+        filterGisting: function(gisting) {
+            beers = this.biertjesBackup;
+
+            if (gisting == 1) {
+                this.biertjes = beers;
+            }
+            else {
+                this.biertjes = beers.filter(i => i.gisting == gisting);
+            }
+        },
+        filterType: function(type) {
+            beers = this.biertjesBackup;
+
+            if (type == 1) {
+                this.biertjes = beers;
+            }
+            else {
+                this.biertjes = beers.filter(i => i.type == type);
+            }
+        },
+        searchFilter: function() {
+            if (this.searchObject == "") {
+                this.biertjes = this.biertjesBackup;
+            } 
+            else {
+            this.biertjes = this.biertjesBackup.filter(i => i.naam.toUpperCase().includes(this.searchObject.toUpperCase()));
+            }
+        }
     }
 });
 
@@ -273,7 +319,7 @@ Vue.component('beer-delete', {
                 <td>Weet u zeker dat u dit item wilt verwijderen?</td>
             </tr>
             <tr>
-                <td><input type="submit" value="JA" v-on:click="deleteBeer"><input type="submit" value="NEE" onclick="del()"></td>
+                <td><input type="submit" value="JA" v-on:click="deleteBeer" onclick="del()"><input type="submit" value="NEE" onclick="del()"></td>
             </tr>
         </table>
     ` ,
@@ -423,34 +469,35 @@ Vue.component('inlog', {
         ` ,
     data: function() {
         return {
-            data : {login : true, gebruikersnaam : null, wachtwoord : null},
+            data : {"login" : true, "gebruikersnaam" : null, "wachtwoord" : null, "role": null},
         }
     },
     methods: {
         login: function() {
             console.log(this.data);
-            // $.ajax({
-            //     method: "POST",
-            //     url: "http://localhost:81/bier_project/login.php",
-            //     data: this.data
-            // })
-            // .then(function (response) {
-            //     this.test = response.data;
-            //     console.log(response.data);
-            // })
-            // .catch(function (error) {
-            //     console.log(error);
-            // });
-
-            axios
-            .post("api/api.php?action=login", this.data)
-            .then( response => {
-
+            $.ajax({
+                method: "POST",
+                url: "api/api.php?action=login",
+                data: this.data
             })
-            .catch(error => {
-                // console.log(error);
+            .then(function (response) {
+                console.log(response.data);
+            })
+            .catch(function (error) {
+                console.log(error);
             });
-            location.reload();
+
+            // axios
+            // .post("api/api.php?action=login", this.data)
+            // .then( response => {
+
+            // })
+            // .catch(error => {
+            //     // console.log(error);
+            // });
+            setTimeout(() => {
+                location.reload();
+            }, 500);
         }
     }
 });

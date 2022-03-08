@@ -112,6 +112,11 @@ function openBrouwers() {
     }
 }
 
+function brouwerButton(element) {
+    document.getElementById("brouwerButtons").style.display = "none";
+    document.getElementById("brouwers").innerHTML = "<h4>brouwer: " + element.innerHTML + "</h4>";
+}
+
 
 function openGisting() {
     div = document.getElementById("gistingButtons");
@@ -125,10 +130,24 @@ function openGisting() {
 
 }
 
-function filterButton(element) {
-    document.getElementById("gistingButtons").style.visibility = "hidden";
+function gistingButton(element) {
+    document.getElementById("gistingButtons").style.display = "none";
+    document.getElementById("gisting").innerHTML = "<h4>gisting: " + element.innerHTML + "</h4>";
+}
 
-    element.parentElement.parentElement.children[0].children[0].innerHTML = "gisting: " + element.innerHTML;
+function openType() {
+    div = document.getElementById("typeButtons");
 
-    console.log(element);
+    if (div.style.display == "block") {
+        div.style.display = "none"
+    } 
+    else {
+        div.style.display = "block"
+    }
+
+}
+
+function typeButton(element) {
+    document.getElementById("typeButtons").style.display = "none";
+    document.getElementById("type").innerHTML = "<h4>type: " + element.innerHTML + "</h4>";
 }
